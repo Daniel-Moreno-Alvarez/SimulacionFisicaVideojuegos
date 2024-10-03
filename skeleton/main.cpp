@@ -3,10 +3,12 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
+#include <list>
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
+#include "Particle.h"
 
 #include <iostream>
 
@@ -30,6 +32,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+Particle* particulita;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -54,6 +57,12 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	////////////////////////////////////////
+
+	Particle* particulita = new Particle({ 0,0,0 }, { 10.0,0,0 }, { 0,0,0 });
+	RegisterRenderItem(particulita->getRenderItem());
+	std::cout << "particulita generada" << std::endl;
 	}
 
 
@@ -64,6 +73,8 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
+	//particulita->integrate(t);
+
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -73,6 +84,8 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
+
+	delete particulita;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
