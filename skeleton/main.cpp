@@ -34,6 +34,8 @@ ContactReportCallback gContactReportCallback;
 
 Particle* particulita;
 
+float Damping = 0.98;
+
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -60,7 +62,7 @@ void initPhysics(bool interactive)
 
 	////////////////////////////////////////
 
-	Particle* particulita = new Particle({ 0,0,0 }, { 10.0,0,0 }, { 0,0,0 });
+	particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());
 	std::cout << "particulita generada" << std::endl;
 	}
@@ -73,7 +75,7 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	//particulita->integrate(t);
+	particulita->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);

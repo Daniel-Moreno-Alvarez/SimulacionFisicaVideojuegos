@@ -4,7 +4,7 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float Damping);
 	~Particle();
 
 	void integrate(double t);
@@ -16,6 +16,6 @@ private:
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 	Vector3 acce;
-
+	float damping;
 };
 
