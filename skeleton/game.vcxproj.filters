@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Render\Camera.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\Render.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="callbacks.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -16,11 +10,17 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="RenderUtils.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="Vector3D.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderUtils.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Render.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,14 +36,14 @@
     <ClInclude Include="Particle.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="RenderUtils.hpp">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Render\Render.h">
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\Camera.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Render.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="RenderUtils.hpp">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
