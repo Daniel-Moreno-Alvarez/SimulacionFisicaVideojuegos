@@ -2,29 +2,59 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Render\Camera.cpp">
-      <Filter>Render</Filter>
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Render\Render.cpp">
-      <Filter>Render</Filter>
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="RenderUtils.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="callbacks.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderUtils.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core.hpp" />
+    <ClInclude Include="Vector3D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="callbacks.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="core.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderUtils.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="Render\Camera.h">
-      <Filter>Render</Filter>
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Render\Render.h">
-      <Filter>Render</Filter>
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="RenderUtils.hpp" />
-    <ClInclude Include="callbacks.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{3d9ddf57-679f-4653-be98-12cae728c749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{b58ed36c-4f8c-4129-b4a9-ca30a2c7efde}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

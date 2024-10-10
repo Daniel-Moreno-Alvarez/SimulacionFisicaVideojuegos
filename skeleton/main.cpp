@@ -9,6 +9,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
+#include "Vector3D.h"
 
 #include <iostream>
 
@@ -32,10 +33,37 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-Particle* particulita;
+RenderItem* ejeX;
+RenderItem* ejeY;
+RenderItem* ejeZ;
+RenderItem* origen;
 
-float Damping = 0.98;
+const float distejes = 10.0f; // distancia de los ejes al origen
+const float tamejes = 1.0f; // tamaño de los ejes
 
+std::vector<Particle*> particulas;
+
+const float Damping = 0.98f;
+const float speed = 50.0f;
+
+void Ejes() {
+
+	Vector3D posX = Vector3D(distejes, 0, 0);
+	PxTransform* trsX = new PxTransform(posX.x, posX.y, posX.z);
+	ejeX = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsX, {1, 0, 0, 1});
+
+	Vector3D posY = Vector3D(0, distejes, 0);
+	PxTransform* trsY = new PxTransform(posY.x, posY.y, posY.z);
+	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsY, {0, 1, 0, 1});
+
+	Vector3D posZ = Vector3D(0, 0, distejes);
+	PxTransform* trsZ = new PxTransform(posZ.x, posZ.y, posZ.z);
+	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsZ, { 0, 0, 1, 1 });
+
+	Vector3D posO = Vector3D(0, 0, 0);
+	PxTransform* trsO = new PxTransform(posO.x, posO.y, posO.z);
+	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsO, { 0, 0, 0, 1 });
+}
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -62,9 +90,11 @@ void initPhysics(bool interactive)
 
 	////////////////////////////////////////
 
-	particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
-	RegisterRenderItem(particulita->getRenderItem());
-	std::cout << "particulita generada" << std::endl;
+	Ejes();
+
+	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
+	RegisterRenderItem(particulita->getRenderItem());*/
+
 	}
 
 
@@ -74,8 +104,20 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-
-	particulita->integrate(t);
+	
+	for (auto it = particulas.begin(); it != particulas.end(); )
+	{
+		if ((*it)->getTransform().p.y <= 0) // condicion para que las particulas desaparezcan
+		{
+			delete *it;
+			it = particulas.erase(it);
+		}
+		else
+		{
+			(*it)->integrate(t);
+			++it;
+		}
+	}
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -87,7 +129,10 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
-	delete particulita;
+	for (auto it = particulas.begin(); it != particulas.end(); )
+	{
+		delete *it;
+	}
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -110,8 +155,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case ' ':
+	case 'P':
 	{
+		Camera* cam = GetCamera();
+		Vector3 offset = cam->getDir() * 5; // para que no esté pegado a la camara
+		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,-10,0}, Damping);
+		RegisterRenderItem(bala->getRenderItem());
+		particulas.push_back(bala);
 		break;
 	}
 	default:
