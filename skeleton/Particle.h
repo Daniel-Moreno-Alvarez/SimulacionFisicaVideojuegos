@@ -4,13 +4,14 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float Damping);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping);
 	~Particle();
 
 	void integrate(double t);
 	RenderItem* getRenderItem();
 	physx::PxTransform getTransform();
-
+	void SetLifeLimit(float LifeLimit);
+	bool ItsAlive();
 private:
 	Vector3 vel;
 	physx::PxTransform pose;
@@ -19,5 +20,7 @@ private:
 	float damping;
 	float wheigt;
 	float factor = 10;
+	float age = 0;
+	float lifeLimit;
 };
 

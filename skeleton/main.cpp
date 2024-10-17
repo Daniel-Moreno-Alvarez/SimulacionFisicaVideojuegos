@@ -10,6 +10,7 @@
 #include "callbacks.hpp"
 #include "Particle.h"
 #include "Vector3D.h"
+#include "ParticleSystem.h"
 
 #include <iostream>
 
@@ -32,6 +33,8 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+
+ParticleSystem generator;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -92,6 +95,7 @@ void initPhysics(bool interactive)
 	////////////////////////////////////////
 
 	Ejes();
+	generator = ParticleSystem({ 0,30,0 });
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());*/
@@ -119,6 +123,8 @@ void stepPhysics(bool interactive, double t)
 			++it;
 		}
 	}
+
+	generator.integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -160,7 +166,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 		Camera* cam = GetCamera();
 		Vector3 offset = cam->getDir() * 5; // para que no esté pegado a la camara
-		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,gravity,0}, Damping);
+		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,gravity,0}, 1.0, Damping);
 		RegisterRenderItem(bala->getRenderItem());
 		particulas.push_back(bala);
 		break;
