@@ -45,6 +45,7 @@ std::vector<Particle*> particulas;
 
 const float Damping = 0.98f;
 const float speed = 50.0f;
+const float gravity = -9.8f;
 
 void Ejes() {
 
@@ -159,7 +160,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 		Camera* cam = GetCamera();
 		Vector3 offset = cam->getDir() * 5; // para que no esté pegado a la camara
-		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,-10,0}, Damping);
+		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,gravity,0}, Damping);
 		RegisterRenderItem(bala->getRenderItem());
 		particulas.push_back(bala);
 		break;

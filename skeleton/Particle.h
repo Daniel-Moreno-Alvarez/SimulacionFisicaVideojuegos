@@ -17,5 +17,7 @@ private:
 	RenderItem* renderItem;
 	Vector3 acce;
 	float damping;
+	float wheigt;
+	float factor = 10;
 };
 
