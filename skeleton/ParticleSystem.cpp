@@ -34,7 +34,7 @@ void ParticleSystem::explosionTipe()
 {
 	emisionRange = 0.0;
 	limitRange = 30.0;
-	generationTimeInterval = 0.5;
+	generationTimeInterval = 1.0;
 	particlesPerEmision = 20;
 	setTipe = 2;
 }
@@ -67,9 +67,10 @@ void ParticleSystem::generateParticle() {
 	{
 		Vector3 vel = UniformDistribution(-1.0, 1.0);
 		vel.normalize();
-		vel *= 100;
+		vel *= 50;
 
-		Particle* p = new Particle(pose.p, vel, gravity, 2.0, Damping);
+		Vector3 acce = -vel;
+		Particle* p = new Particle(pose.p, vel, acce, 2.0, Damping);
 
 		p->SetLifeLimit(1.0);
 		p->SetColor({ 0,1,1,1 });
