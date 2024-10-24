@@ -34,7 +34,9 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-ParticleSystem generator;
+ParticleSystem* generator;
+ParticleSystem* generator1;
+ParticleSystem* generator2;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -95,7 +97,11 @@ void initPhysics(bool interactive)
 	////////////////////////////////////////
 
 	Ejes();
-	generator = ParticleSystem({ 0,30,0 });
+	generator = new ParticleSystem({0, 30, 0});
+	generator1 = new ParticleSystem({ 30, 30, 0 });
+	generator1->fireTipe();
+	generator2 = new ParticleSystem({ 0, 30, 30 });
+	generator2->explosionTipe();
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());*/
@@ -124,7 +130,9 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 
-	generator.integrate(t);
+	generator->integrate(t);
+	generator1->integrate(t);
+	generator2->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);

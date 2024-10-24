@@ -24,6 +24,11 @@ void Particle::SetLifeLimit(float LifeLimit) {
     lifeLimit = age + LifeLimit;
 }
 
+void Particle::SetColor(Vector4 color)
+{
+    renderItem->color = color;
+}
+
 void Particle::integrate(double t) {
     age += t;
     vel += acce * t;

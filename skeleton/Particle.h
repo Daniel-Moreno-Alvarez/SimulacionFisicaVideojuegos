@@ -11,6 +11,7 @@ public:
 	RenderItem* getRenderItem();
 	physx::PxTransform getTransform();
 	void SetLifeLimit(float LifeLimit);
+	void SetColor(Vector4 color);
 	bool ItsAlive();
 private:
 	Vector3 vel;
