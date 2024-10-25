@@ -44,19 +44,15 @@ void ParticleSystem::generateParticle() {
 	{
 	case 1: // fuego
 	{
-		Vector3 pos = pose.p + NormalDistribution(0, emisionRange);
+		Vector3 pos = pose.p + NormalDistributionVec(0, emisionRange);
 
-		static std::mt19937 gen(std::random_device{}());
-		std::normal_distribution<float> distrib(10.0, 2.0);
-		Vector3 vel = {0, distrib(gen), 0};
+		float y = NormalDistribution(8, 2);
+		Vector3 vel = {0, y, 0};
 
-		std::normal_distribution<float> distrib1(0.8, 0.2);
-		float tam = distrib1(gen);
+		float tam = NormalDistribution(0.8, 0.2);
 		Particle* p = new Particle(pos, vel, {0,0,0}, tam, Damping);
 
-		std::normal_distribution<float> distrib2(1, 0.5);
-
-		p->SetLifeLimit(distrib2(gen));
+		p->SetLifeLimit(NormalDistribution(1, 0.5));
 		p->SetColor({ 1,0,0,1 });
 		RegisterRenderItem(p->getRenderItem());
 		particles.push_back(p);
@@ -65,7 +61,7 @@ void ParticleSystem::generateParticle() {
 	}
 	case 2: // exlposion
 	{
-		Vector3 vel = UniformDistribution(-1.0, 1.0);
+		Vector3 vel = UniformDistributionVec(-1.0, 1.0);
 		vel.normalize();
 		vel *= 50;
 
@@ -81,10 +77,10 @@ void ParticleSystem::generateParticle() {
 	}
 	default: // chispas
 	{
-		Vector3 vel = UniformDistribution(-10.0, 10.0);
+		Vector3 vel = { UniformDistribution(-2, 2), UniformDistribution(15, 20), UniformDistribution(-2, 2) };
 
 		Particle* p = new Particle(pose.p, vel, gravity, 0.5, Damping);
-		p->SetLifeLimit(1.0);
+		p->SetLifeLimit(3.0);
 		RegisterRenderItem(p->getRenderItem());
 		particles.push_back(p);
 
@@ -93,36 +89,43 @@ void ParticleSystem::generateParticle() {
 	}
 }
 
-Vector3 ParticleSystem::UniformDistribution(float min, float max) {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<> distrib(min, max);
+Vector3 ParticleSystem::UniformDistributionVec(float min, float max) {
 
 	Vector3 vec;
-	vec.x = distrib(gen);
-	vec.y = distrib(gen);
-	vec.z = distrib(gen);
+	vec.x = UniformDistribution(min, max);
+	vec.y = UniformDistribution(min, max);
+	vec.z = UniformDistribution(min, max);
 
 	return vec;
 }
 
-Vector3 ParticleSystem::NormalDistribution(float med, float destip) {
-	Vector3 vec;
-	if (destip == 0) {
-		vec.x = med;
-		vec.y = med;
-		vec.z = med;
+float ParticleSystem::UniformDistribution(float min, float max)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::uniform_real_distribution<> distrib(min, max);
 
-		return vec;
+	return distrib(gen);
+}
+
+Vector3 ParticleSystem::NormalDistributionVec(float med, float destip) {
+	Vector3 vec;
+	vec.x = NormalDistribution(med, destip);
+	vec.y = NormalDistribution(med, destip);
+	vec.z = NormalDistribution(med, destip);
+
+	return vec;
+}
+
+float ParticleSystem::NormalDistribution(float med, float destip)
+{
+	if (destip == 0) {
+		return med;
 	}
 	static std::mt19937 gen(std::random_device{}());
 	std::normal_distribution<float> distrib(med, destip);
 
-	vec.x = distrib(gen);
-	vec.y = distrib(gen);
-	vec.z = distrib(gen);
-
-	return vec;
+	return distrib(gen);
 }
 
 void ParticleSystem::checkParticles(double t) {

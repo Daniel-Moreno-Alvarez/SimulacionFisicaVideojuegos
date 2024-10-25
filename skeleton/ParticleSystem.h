@@ -19,8 +19,10 @@ private:
 public:
 	ParticleSystem();
 	ParticleSystem(Vector3 Pos);
-	Vector3 UniformDistribution(float nim, float max);
-	Vector3 NormalDistribution(float med, float distip);
+	Vector3 UniformDistributionVec(float nim, float max);
+	float UniformDistribution(float min, float max);
+	Vector3 NormalDistributionVec(float med, float destip);
+	float NormalDistribution(float med, float destip);
 	void integrate(double t);
 	void fireTipe();
 	void explosionTipe();
