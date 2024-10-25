@@ -3,11 +3,11 @@
 
 ParticleSystem::ParticleSystem() : pose({0, 0, 0}), emisionRange(0.0), 
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
-
+	particles = new std::vector<Particle*>;
 }
 ParticleSystem::ParticleSystem(Vector3 pos) : pose(pos), emisionRange(0.0), 
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
-
+	particles = new std::vector<Particle*>;
 }
 void ParticleSystem::integrate(double t) {
 	lastTime += t;
@@ -35,7 +35,7 @@ void ParticleSystem::explosionTipe()
 	emisionRange = 0.0;
 	limitRange = 30.0;
 	generationTimeInterval = 1.0;
-	particlesPerEmision = 20;
+	particlesPerEmision = 30;
 	setTipe = 2;
 }
 
@@ -55,7 +55,7 @@ void ParticleSystem::generateParticle() {
 		p->SetLifeLimit(NormalDistribution(1, 0.5));
 		p->SetColor({ 1,0,0,1 });
 		RegisterRenderItem(p->getRenderItem());
-		particles.push_back(p);
+		particles->push_back(p);
 
 		break;
 	}
@@ -71,7 +71,7 @@ void ParticleSystem::generateParticle() {
 		p->SetLifeLimit(1.0);
 		p->SetColor({ 0,1,1,1 });
 		RegisterRenderItem(p->getRenderItem());
-		particles.push_back(p);
+		particles->push_back(p);
 
 		break;
 	}
@@ -82,7 +82,7 @@ void ParticleSystem::generateParticle() {
 		Particle* p = new Particle(pose.p, vel, gravity, 0.5, Damping);
 		p->SetLifeLimit(3.0);
 		RegisterRenderItem(p->getRenderItem());
-		particles.push_back(p);
+		particles->push_back(p);
 
 		break;
 	}
@@ -103,7 +103,7 @@ float ParticleSystem::UniformDistribution(float min, float max)
 {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<> distrib(min, max);
+	std::uniform_real_distribution<float> distrib(min, max);
 
 	return distrib(gen);
 }
@@ -129,12 +129,12 @@ float ParticleSystem::NormalDistribution(float med, float destip)
 }
 
 void ParticleSystem::checkParticles(double t) {
-	for (auto it = particles.begin(); it != particles.end(); )
+	for (auto it = particles->begin(); it != particles->end(); )
 	{
 		if (!(*it)->ItsAlive() || ((*it)->getTransform().p - pose.p).magnitude() > limitRange)
 		{
 			delete* it;
-			it = particles.erase(it);
+			it = particles->erase(it);
 		}
 		else
 		{

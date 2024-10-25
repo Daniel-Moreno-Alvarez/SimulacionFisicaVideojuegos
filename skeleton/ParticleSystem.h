@@ -8,7 +8,7 @@ private:
 	physx::PxTransform pose;
 	float emisionRange;
 	float limitRange;
-	std::vector<Particle*> particles;
+	std::vector<Particle*>* particles;
 	float generationTimeInterval;
 	int particlesPerEmision;
 	float lastTime = 0;
