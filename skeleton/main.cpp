@@ -11,6 +11,7 @@
 #include "Particle.h"
 #include "Vector3D.h"
 #include "ParticleSystem.h"
+#include "GravityGenerator.h"
 
 #include <iostream>
 
@@ -37,6 +38,8 @@ ContactReportCallback gContactReportCallback;
 ParticleSystem* generator;
 ParticleSystem* generator1;
 ParticleSystem* generator2;
+
+GravityGenerator* gg;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -102,6 +105,9 @@ void initPhysics(bool interactive)
 	generator1->fireTipe();
 	generator2 = new ParticleSystem({ 0, 30, 30 });
 	generator2->explosionTipe();
+
+	gg = new GravityGenerator(Vector3(0,0,0));
+	generator->addForceGenerator(gg);
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());*/

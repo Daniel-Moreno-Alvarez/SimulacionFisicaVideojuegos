@@ -263,6 +263,7 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="Vector3D.cpp" />
+    <ClCompile Include="WindGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Vector3D.h" />
+    <ClInclude Include="WindGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

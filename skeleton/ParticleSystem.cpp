@@ -7,7 +7,7 @@ limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	forcegenerators = new std::vector<ForceGenerator*>;
 }
 ParticleSystem::ParticleSystem(Vector3 pos) : pose(pos), emisionRange(0.0), 
-limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
+limitRange(90.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
 	forcegenerators = new std::vector<ForceGenerator*>;
 }
@@ -56,6 +56,7 @@ void ParticleSystem::explosionTipe()
 }
 
 void ParticleSystem::generateParticle() {
+	Particle* p;
 	switch (setTipe)
 	{
 	case 1: // fuego
@@ -66,7 +67,7 @@ void ParticleSystem::generateParticle() {
 		Vector3 vel = {0, y, 0};
 
 		float tam = NormalDistribution(0.8, 0.2);
-		Particle* p = new Particle(pos, vel, {0,0,0}, tam, Damping);
+		p = new Particle(pos, vel, {0,0,0}, tam, Damping);
 
 		p->SetLifeLimit(NormalDistribution(1, 0.5));
 		p->SetColor({ 1,0,0,1 });
@@ -82,7 +83,7 @@ void ParticleSystem::generateParticle() {
 		vel *= 50;
 
 		Vector3 acce = -vel;
-		Particle* p = new Particle(pose.p, vel, acce, 2.0, Damping);
+		p = new Particle(pose.p, vel, acce, 2.0, Damping);
 
 		p->SetLifeLimit(1.0);
 		p->SetColor({ 0,1,1,1 });
@@ -95,13 +96,18 @@ void ParticleSystem::generateParticle() {
 	{
 		Vector3 vel = { UniformDistribution(-2, 2), UniformDistribution(15, 20), UniformDistribution(-2, 2) };
 
-		Particle* p = new Particle(pose.p, vel, Vector3(), 0.5, Damping);
+		p = new Particle(pose.p, vel, Vector3(0,0,0), 0.5, Damping);
 		p->SetLifeLimit(3.0);
 		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
 		break;
 	}
+	}
+
+	for (auto e : *forcegenerators)
+	{
+		e->addParticle(p);
 	}
 }
 
@@ -158,4 +164,9 @@ void ParticleSystem::checkParticles(double t) {
 			++it;
 		}
 	}
+}
+
+void ParticleSystem::addForceGenerator(ForceGenerator* fg)
+{
+	forcegenerators->push_back(fg);
 }

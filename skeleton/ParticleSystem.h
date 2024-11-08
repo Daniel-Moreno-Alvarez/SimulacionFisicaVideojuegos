@@ -33,5 +33,6 @@ public:
 	void generateParticle();
 	void checkParticles(double t);
 
+	void addForceGenerator(ForceGenerator* fg);
 };
 
