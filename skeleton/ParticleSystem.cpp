@@ -1,13 +1,29 @@
 #include <random>
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem() : pose({0, 0, 0}), emisionRange(0.0), 
+ParticleSystem::ParticleSystem() : pose({ 0, 0, 0 }), emisionRange(0.0),
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
+	forcegenerators = new std::vector<ForceGenerator*>;
 }
 ParticleSystem::ParticleSystem(Vector3 pos) : pose(pos), emisionRange(0.0), 
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
+	forcegenerators = new std::vector<ForceGenerator*>;
+}
+ParticleSystem::~ParticleSystem()
+{
+	for (auto e : *particles)
+	{
+		delete e;
+	}
+	delete particles;
+
+	for (auto e : *forcegenerators)
+	{
+		delete e;
+	}
+	delete forcegenerators;
 }
 void ParticleSystem::integrate(double t) {
 	lastTime += t;
@@ -79,7 +95,7 @@ void ParticleSystem::generateParticle() {
 	{
 		Vector3 vel = { UniformDistribution(-2, 2), UniformDistribution(15, 20), UniformDistribution(-2, 2) };
 
-		Particle* p = new Particle(pose.p, vel, gravity, 0.5, Damping);
+		Particle* p = new Particle(pose.p, vel, Vector3(), 0.5, Damping);
 		p->SetLifeLimit(3.0);
 		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);

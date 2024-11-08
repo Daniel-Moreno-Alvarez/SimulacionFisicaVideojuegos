@@ -8,7 +8,7 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Dam
     renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
     renderItem->color = { 1, 1, 0, 1 };
     
-    wheigt = 0;
+    mass = 1.0;
     age = 0;
     lifeLimit = NULL;
 
@@ -31,12 +31,13 @@ void Particle::SetColor(Vector4 color)
 
 void Particle::integrate(double t) {
     age += t;
+
     vel += acce * t;
     vel *= pow(damping, t);
     pose.p += vel * t;
 }
 
-bool  Particle::ItsAlive() {
+bool Particle::ItsAlive() {
     if (lifeLimit != NULL) {
         if (age >= lifeLimit) {
             return false;
@@ -44,6 +45,11 @@ bool  Particle::ItsAlive() {
         else return true;
     }
     else return true;
+}
+
+void Particle::addForce(Vector3 force)
+{
+    acce += force / mass;
 }
 
 RenderItem* Particle::getRenderItem()
@@ -54,4 +60,14 @@ RenderItem* Particle::getRenderItem()
 physx::PxTransform Particle::getTransform()
 {
     return pose;
+}
+
+Vector3 Particle::getVelocity()
+{
+    return vel;
+}
+
+float Particle::getMass()
+{
+    return mass;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderUtils.hpp"
-#include "Particle.h"
+#include "ForceGenerator.h"
+
 
 class ParticleSystem
 {
@@ -16,9 +17,12 @@ private:
 	const Vector3 gravity = {0,  -9.8 , 0};
 	int setTipe = 0;
 
+	std::vector<ForceGenerator*>* forcegenerators;
+
 public:
 	ParticleSystem();
 	ParticleSystem(Vector3 Pos);
+	~ParticleSystem();
 	Vector3 UniformDistributionVec(float nim, float max);
 	float UniformDistribution(float min, float max);
 	Vector3 NormalDistributionVec(float med, float destip);

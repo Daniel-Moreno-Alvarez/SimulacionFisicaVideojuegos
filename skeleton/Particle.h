@@ -10,16 +10,19 @@ public:
 	void integrate(double t);
 	RenderItem* getRenderItem();
 	physx::PxTransform getTransform();
+	Vector3 getVelocity();
+	float getMass();
 	void SetLifeLimit(float LifeLimit);
 	void SetColor(Vector4 color);
 	bool ItsAlive();
+	void addForce(Vector3 force);
 private:
 	Vector3 vel;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 	Vector3 acce;
 	float damping;
-	float wheigt;
+	float mass;
 	float factor = 10;
 	float age = 0;
 	float lifeLimit;

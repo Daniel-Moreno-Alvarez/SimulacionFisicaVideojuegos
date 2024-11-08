@@ -23,7 +23,13 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceGenerator.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityGenerator.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,8 +54,15 @@
     <ClInclude Include="RenderUtils.hpp">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ParticleSystem.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceGenerator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityGenerator.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,5 +75,10 @@
     <Filter Include="Archivos de origen">
       <UniqueIdentifier>{b58ed36c-4f8c-4129-b4a9-ca30a2c7efde}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>Render</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
