@@ -5,7 +5,6 @@ ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _force) :
 	force(_force),
 	volume(Vector3())
 {
-	particles = new std::vector<Particle*>;
 }
 
 ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _volume, Vector3 _force) :
@@ -13,16 +12,41 @@ ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _volume, Vector3 _force) :
 	volume(_volume), 
 	force(_force)
 {
-	particles = new std::vector<Particle*>;
+	if (volume.x < 0){
+		volume.x *= -1;
+	}
+	if (volume.y < 0) {
+		volume.y *= -1;
+	}
+	if (volume.z < 0) {
+		volume.z *= -1;
+	}
 }
 
 ForceGenerator::~ForceGenerator()
 {
-	delete particles;
-	particles->clear();
+	for (auto p : particles) {
+		delete p.first;
+	}
+	particles.clear();
 }
 
 void ForceGenerator::addParticle(Particle* particle)
 {
-	particles->push_back(particle);
+	particles.push_back({ particle, false });
+}
+
+bool ForceGenerator::isInVolume(Particle* particle)
+{
+	if (volume == Vector3())
+	{
+		return false;
+	}
+
+	Vector3 parpos = particle->getTransform().p;
+
+	return 
+		(parpos.x >= pose.p.x - volume.x && parpos.x <= pose.p.x + volume.x) &&
+		(parpos.y >= pose.p.y - volume.y && parpos.y <= pose.p.y + volume.y) &&
+		(parpos.z >= pose.p.z - volume.z && parpos.z <= pose.p.z + volume.z);
 }

@@ -10,8 +10,9 @@ public:
 	virtual void addParticle(Particle* particle);
 	virtual void update() = 0;
 	virtual void addForce(Particle* particle) = 0;
+	bool isInVolume(Particle* p);
 protected:
-	std::vector<std::pair<Particle*, bool>*>* particles;
+	std::vector<std::pair<Particle*, bool>> particles;
 	physx::PxTransform pose;
 	Vector3 force;
 	Vector3 volume;
