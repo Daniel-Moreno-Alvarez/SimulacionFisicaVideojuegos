@@ -13,6 +13,7 @@
 #include "ParticleSystem.h"
 #include "GravityGenerator.h"
 #include "WindGenerator.h";
+#include "VortexGenerator.h"
 
 #include <iostream>
 
@@ -42,6 +43,7 @@ ParticleSystem* generator2;
 
 GravityGenerator* gg;
 WindGenerator* wg;
+VortexGenerator* vg;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -112,7 +114,8 @@ void initPhysics(bool interactive)
 	wg = new WindGenerator({0, -10, 0}, {30, 30, 30}, {0, 0, 20});
 	generator->addForceGenerator(wg);
 
-
+	vg = new VortexGenerator({0,30,30}, 30, 1);
+	generator2->addForceGenerator(vg);
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());*/
