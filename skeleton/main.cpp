@@ -12,6 +12,7 @@
 #include "Vector3D.h"
 #include "ParticleSystem.h"
 #include "GravityGenerator.h"
+#include "WindGenerator.h";
 
 #include <iostream>
 
@@ -40,6 +41,7 @@ ParticleSystem* generator1;
 ParticleSystem* generator2;
 
 GravityGenerator* gg;
+WindGenerator* wg;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -102,12 +104,15 @@ void initPhysics(bool interactive)
 	Ejes();
 	generator = new ParticleSystem({0, 30, 0});
 	generator1 = new ParticleSystem({ 30, 30, 0 });
-	generator1->fireTipe();
 	generator2 = new ParticleSystem({ 0, 30, 30 });
-	generator2->explosionTipe();
 
 	gg = new GravityGenerator(Vector3(0,0,0));
 	generator->addForceGenerator(gg);
+
+	wg = new WindGenerator({0, -10, 0}, {30, 30, 30}, {0, 0, 20});
+	generator->addForceGenerator(wg);
+
+
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
 	RegisterRenderItem(particulita->getRenderItem());*/

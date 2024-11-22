@@ -3,7 +3,7 @@
 ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _force) :
 	pose(_pose),
 	force(_force),
-	volume(Vector3())
+	volume(Vector3(0,0,0))
 {
 }
 
@@ -23,17 +23,33 @@ ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _volume, Vector3 _force) :
 	}
 }
 
+void ForceGenerator::update() {
+	for (auto it = particles.begin(); it != particles.end();) {
+		Particle* p = *it;
+
+		if (p == nullptr || !p->ItsAlive()) {
+			it = particles.erase(it);
+		}
+		else {
+			if (isInVolume(p) || volume == Vector3(0,0,0)) {
+				addForce(p);
+			}
+			++it;
+		}
+	}
+}
+
 ForceGenerator::~ForceGenerator()
 {
 	for (auto p : particles) {
-		delete p.first;
+		delete p;
 	}
 	particles.clear();
 }
 
 void ForceGenerator::addParticle(Particle* particle)
 {
-	particles.push_back({ particle, false });
+	particles.push_back(particle);
 }
 
 bool ForceGenerator::isInVolume(Particle* particle)

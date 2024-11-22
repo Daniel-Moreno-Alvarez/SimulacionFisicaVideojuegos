@@ -17,7 +17,7 @@ private:
 	const Vector3 gravity = {0,  -9.8 , 0};
 	int setTipe = 0;
 
-	std::vector<ForceGenerator*>* forcegenerators;
+	std::vector<ForceGenerator*> forcegenerators;
 
 public:
 	ParticleSystem();

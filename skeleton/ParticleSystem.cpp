@@ -4,12 +4,10 @@
 ParticleSystem::ParticleSystem() : pose({ 0, 0, 0 }), emisionRange(0.0),
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
-	forcegenerators = new std::vector<ForceGenerator*>;
 }
 ParticleSystem::ParticleSystem(Vector3 pos) : pose(pos), emisionRange(0.0), 
 limitRange(90.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
-	forcegenerators = new std::vector<ForceGenerator*>;
 }
 ParticleSystem::~ParticleSystem()
 {
@@ -19,11 +17,11 @@ ParticleSystem::~ParticleSystem()
 	}
 	delete particles;
 
-	for (auto e : *forcegenerators)
+	for (auto e : forcegenerators)
 	{
 		delete e;
 	}
-	delete forcegenerators;
+	forcegenerators.clear();
 }
 void ParticleSystem::integrate(double t) {
 	lastTime += t;
@@ -35,6 +33,9 @@ void ParticleSystem::integrate(double t) {
 		lastTime = 0;
 	}
 	checkParticles(t);
+	for (auto gen : forcegenerators) {
+		gen->update();
+	}
 }
 
 void ParticleSystem::fireTipe()
@@ -97,7 +98,7 @@ void ParticleSystem::generateParticle() {
 		Vector3 vel = { UniformDistribution(-2, 2), UniformDistribution(15, 20), UniformDistribution(-2, 2) };
 
 		p = new Particle(pose.p, vel, Vector3(0,0,0), 0.5, Damping);
-		p->SetLifeLimit(3.0);
+		p->SetLifeLimit(10.0);
 		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
@@ -105,7 +106,7 @@ void ParticleSystem::generateParticle() {
 	}
 	}
 
-	for (auto e : *forcegenerators)
+	for (auto e : forcegenerators)
 	{
 		e->addParticle(p);
 	}
@@ -168,5 +169,5 @@ void ParticleSystem::checkParticles(double t) {
 
 void ParticleSystem::addForceGenerator(ForceGenerator* fg)
 {
-	forcegenerators->push_back(fg);
+	forcegenerators.push_back(fg);
 }

@@ -32,9 +32,11 @@ void Particle::SetColor(Vector4 color)
 void Particle::integrate(double t) {
     age += t;
 
-    vel += acce * t;
+    vel += (acce + acce_acum) * t;
     vel *= pow(damping, t);
     pose.p += vel * t;
+
+    acce_acum = {0, 0, 0};
 }
 
 bool Particle::ItsAlive() {
@@ -49,7 +51,7 @@ bool Particle::ItsAlive() {
 
 void Particle::addForce(Vector3 force)
 {
-    acce += force / mass;
+    acce_acum += force / mass;
 }
 
 RenderItem* Particle::getRenderItem()
