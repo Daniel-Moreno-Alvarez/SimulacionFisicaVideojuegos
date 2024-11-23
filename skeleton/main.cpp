@@ -114,7 +114,7 @@ void initPhysics(bool interactive)
 	wg = new WindGenerator({0, -10, 0}, {30, 30, 30}, {0, 0, 20});
 	generator->addForceGenerator(wg);
 
-	vg = new VortexGenerator({0,30,30}, 30, 1);
+	vg = new VortexGenerator({0,30,30}, 30, 5);
 	generator2->addForceGenerator(vg);
 
 	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
