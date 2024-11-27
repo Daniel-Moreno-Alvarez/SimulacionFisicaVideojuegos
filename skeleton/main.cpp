@@ -14,6 +14,7 @@
 #include "GravityGenerator.h"
 #include "WindGenerator.h";
 #include "VortexGenerator.h"
+#include "ExplosionGenerator.h"
 
 #include <iostream>
 
@@ -37,13 +38,14 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-ParticleSystem* generator;
-ParticleSystem* generator1;
-ParticleSystem* generator2;
+ParticleSystem* particleGen1;
+ParticleSystem* particleGen2;
+ParticleSystem* particleGen3;
 
 GravityGenerator* gg;
 WindGenerator* wg;
 VortexGenerator* vg;
+ExplosionGenerator* eg;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -104,23 +106,29 @@ void initPhysics(bool interactive)
 	////////////////////////////////////////
 
 	Ejes();
-	generator = new ParticleSystem({0, 30, 0});
-	generator1 = new ParticleSystem({ 30, 30, 0 });
-	generator2 = new ParticleSystem({ 0, 30, 30 });
+	Vector3 position1 = { 0, 30, 0 };
+	particleGen1 = new ParticleSystem(position1);
+	particleGen1->staticTipe();
+	Vector3 position2 = { -40, 30, 80 };
+	particleGen2 = new ParticleSystem(position2);
+	particleGen2->staticTipe();
+	Vector3 position3 = { 80, 30, -40 };
+	particleGen3 = new ParticleSystem(position3);
+	particleGen3->staticTipe();
 
-	gg = new GravityGenerator(Vector3(0,0,0));
-	generator->addForceGenerator(gg);
+	gg = new GravityGenerator(position1);
+	particleGen1->addForceGenerator(gg);
 
-	wg = new WindGenerator({0, -10, 0}, {30, 30, 30}, {0, 0, 20});
-	generator->addForceGenerator(wg);
+	wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
+	particleGen1->addForceGenerator(wg);
 
-	vg = new VortexGenerator({0,30,30}, 30, 5);
-	generator2->addForceGenerator(vg);
+	vg = new VortexGenerator(position2, 60, 1);
+	particleGen2->addForceGenerator(vg);
 
-	/*particulita = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,-10,0 }, Damping);
-	RegisterRenderItem(particulita->getRenderItem());*/
+	eg = new ExplosionGenerator(position3, 30, 50);
+	particleGen3->addForceGenerator(eg);
 
-	}
+}
 
 
 // Function to configure what happens in each step of physics
@@ -144,9 +152,9 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 
-	generator->integrate(t);
-	generator1->integrate(t);
-	generator2->integrate(t);
+	particleGen1->integrate(t);
+	particleGen2->integrate(t);
+	particleGen3->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -191,6 +199,11 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,gravity,0}, 1.0, Damping);
 		RegisterRenderItem(bala->getRenderItem());
 		particulas.push_back(bala);
+		break;
+	}
+	case 'E':
+	{
+		eg->interact();
 		break;
 	}
 	default:

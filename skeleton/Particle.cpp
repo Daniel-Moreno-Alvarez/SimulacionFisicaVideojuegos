@@ -29,6 +29,11 @@ void Particle::SetColor(Vector4 color)
     renderItem->color = color;
 }
 
+void Particle::SetMass(float _mass)
+{
+    mass = _mass;
+}
+
 void Particle::integrate(double t) {
     age += t;
 

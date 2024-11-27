@@ -23,7 +23,7 @@ ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _volume, Vector3 _force) :
 	}
 }
 
-void ForceGenerator::update() {
+void ForceGenerator::update(double t) {
 	for (auto it = particles.begin(); it != particles.end();) {
 		Particle* p = *it;
 
@@ -32,7 +32,7 @@ void ForceGenerator::update() {
 		}
 		else {
 			if (isInVolume(p) || volume == Vector3(0,0,0)) {
-				addForce(p);
+				addForce(p, t);
 			}
 			++it;
 		}

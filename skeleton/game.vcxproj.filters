@@ -37,6 +37,7 @@
     <ClCompile Include="VortexGenerator.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="ExplosionGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3D.h">
@@ -76,6 +77,7 @@
     <ClInclude Include="VortexGenerator.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ExplosionGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

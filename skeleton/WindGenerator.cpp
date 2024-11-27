@@ -6,7 +6,7 @@ WindGenerator::WindGenerator(Vector3 _pose, Vector3 _volume, Vector3 _velocity) 
 
 }
 
-void WindGenerator::addForce(Particle* particle)
+void WindGenerator::addForce(Particle* particle, double t)
 {
     Vector3 _force = k1 * (force - particle->getVelocity());
     particle->addForce(_force);

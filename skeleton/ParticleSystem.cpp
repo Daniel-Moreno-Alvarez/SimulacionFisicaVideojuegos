@@ -34,7 +34,7 @@ void ParticleSystem::integrate(double t) {
 	}
 	checkParticles(t);
 	for (auto gen : forcegenerators) {
-		gen->update();
+		gen->update(t);
 	}
 }
 
@@ -54,6 +54,15 @@ void ParticleSystem::explosionTipe()
 	generationTimeInterval = 1.0;
 	particlesPerEmision = 30;
 	setTipe = 2;
+}
+
+void ParticleSystem::staticTipe()
+{
+	emisionRange = 5.0;
+	limitRange = 60.0;
+	generationTimeInterval = 0.05;
+	particlesPerEmision = 5;
+	setTipe = 3;
 }
 
 void ParticleSystem::generateParticle() {
@@ -87,6 +96,22 @@ void ParticleSystem::generateParticle() {
 		p = new Particle(pose.p, vel, acce, 2.0, Damping);
 
 		p->SetLifeLimit(1.0);
+		p->SetColor({ 0,1,1,1 });
+		RegisterRenderItem(p->getRenderItem());
+		particles->push_back(p);
+
+		break;
+	}
+	case 3: // estaticas
+	{
+		Vector3 pos = pose.p + NormalDistributionVec(0, emisionRange);
+		Vector3 vel = { 0,0,0 };
+		Vector3 acce = { 0,0,0 };
+		float mass = UniformDistribution(0.5, 2);
+		float size = cbrt(mass);
+		p = new Particle(pos, vel, acce, size, Damping);
+		p->SetMass(mass);
+		p->SetLifeLimit(10.0);
 		p->SetColor({ 0,1,1,1 });
 		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);

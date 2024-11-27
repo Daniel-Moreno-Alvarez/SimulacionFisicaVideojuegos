@@ -2,7 +2,6 @@
 #include "RenderUtils.hpp"
 #include "ForceGenerator.h"
 
-
 class ParticleSystem
 {
 private:
@@ -30,6 +29,7 @@ public:
 	void integrate(double t);
 	void fireTipe();
 	void explosionTipe();
+	void staticTipe();
 	void generateParticle();
 	void checkParticles(double t);
 

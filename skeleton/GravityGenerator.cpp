@@ -6,7 +6,7 @@ GravityGenerator::GravityGenerator(Vector3 _pose) :
 	force = gravity;
 }
 
-void GravityGenerator::addForce(Particle* particle)
+void GravityGenerator::addForce(Particle* particle, double t)
 {
 	// para que sea aceleracion independiente de la masa
 	particle->addForce(force * particle->getMass());

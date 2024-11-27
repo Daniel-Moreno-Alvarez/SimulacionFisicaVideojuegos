@@ -14,6 +14,7 @@ public:
 	float getMass();
 	void SetLifeLimit(float LifeLimit);
 	void SetColor(Vector4 color);
+	void SetMass(float mass);
 	bool ItsAlive();
 	void addForce(Vector3 force);
 private:
