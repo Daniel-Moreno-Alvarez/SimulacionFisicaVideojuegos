@@ -34,10 +34,8 @@ void ParticleSystem::integrate(double t) {
 		}
 		lastTime = 0;
 	}
+	checkForceGenerator(t);
 	checkParticles(t);
-	for (auto gen : forcegenerators) {
-		gen->update(t);
-	}
 }
 
 void ParticleSystem::fireTipe()
@@ -145,15 +143,17 @@ void ParticleSystem::generateSpringDemo(unsigned int _num, Vector3 anchor_pos)
 	limitRange = 1000.0;
 	setTipe = 0;
 
-	double _k = 5;
+	double _k = 20;
 
 	float resting_length = 5;
 	float auxDamping = 0.6;
+	float massAux = 3.0;
 
 	AnchoredSpringFG* f3 = new AnchoredSpringFG(_k, resting_length, pose.p + anchor_pos);
 	double aux = -5;
 	Vector3 auxPos = pose.p + anchor_pos + Vector3(0, aux, aux);
 	Particle* anterior = new Particle(auxPos, { 0,0,0 }, { 0,0,0 }, 1.0, auxDamping);
+	anterior->SetMass(massAux);
 	anterior->SetColor({ 1, 0, 1 , 1 });
 	for (auto fg : forcegenerators) {
 		fg->addParticle(anterior);
@@ -167,7 +167,8 @@ void ParticleSystem::generateSpringDemo(unsigned int _num, Vector3 anchor_pos)
 		aux = (i + 1) * -5;
 		auxPos = pose.p + anchor_pos + Vector3(0, aux, aux);
 		Particle* nueva = new Particle(auxPos, { 0,0,0 }, { 0,0,0 }, 1.0, auxDamping);
-		float colorAux = i * 0.1;
+		nueva->SetMass(massAux);
+		float colorAux = i * 0.2;
 		nueva->SetColor({1, colorAux, 1 , 1});
 		for (auto fg : forcegenerators) {
 			if (!fg->isSpring())
@@ -244,6 +245,15 @@ void ParticleSystem::checkParticles(double t) {
 		{
 			(*it)->integrate(t);
 			++it;
+		}
+	}
+}
+
+void ParticleSystem::checkForceGenerator(double t)
+{
+	for (auto fg : forcegenerators) {
+		if (fg->isActive()) {
+			fg->update(t);
 		}
 	}
 }

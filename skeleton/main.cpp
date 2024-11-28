@@ -41,12 +41,14 @@ ContactReportCallback gContactReportCallback;
 ParticleSystem* particleGen1;
 ParticleSystem* particleGen2;
 ParticleSystem* particleGen3;
-ParticleSystem* particleGen4;
+ParticleSystem* chainGen;
 
 GravityGenerator* gg;
 WindGenerator* wg;
 VortexGenerator* vg;
 ExplosionGenerator* eg;
+
+WindGenerator* wgAux;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -117,12 +119,10 @@ void initPhysics(bool interactive)
 	particleGen3 = new ParticleSystem(position3);
 	particleGen3->staticTipe();
 
-	particleGen4 = new ParticleSystem({ 0,0,0 });
+	/////////// PRACTICA 3
 
 	gg = new GravityGenerator(position1);
 	particleGen1->addForceGenerator(gg);
-	particleGen4->addForceGenerator(gg);
-	particleGen4->generateSpringDemo(5, {0, 60, 0});
 
 	wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
 	particleGen1->addForceGenerator(wg);
@@ -132,6 +132,17 @@ void initPhysics(bool interactive)
 
 	eg = new ExplosionGenerator(position3, 30, 500);
 	particleGen3->addForceGenerator(eg);
+
+	/////////// PRACTICA 4
+
+	chainGen = new ParticleSystem({ 0,0,0 });
+	chainGen->addForceGenerator(gg);
+
+	wgAux = new WindGenerator({ 0, 30,0}, { 30, 30, 30 }, { 0, 0, -20 });
+	chainGen->addForceGenerator(wgAux);
+	wgAux->setActive(false);
+
+	chainGen->generateSpringDemo(5, { 0, 60, 0 });
 
 }
 
@@ -160,7 +171,7 @@ void stepPhysics(bool interactive, double t)
 	//particleGen1->integrate(t);
 	//particleGen2->integrate(t);
 	//particleGen3->integrate(t);
-	particleGen4->integrate(t);
+	chainGen->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -214,17 +225,17 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case 'M':
 	{
-		particleGen4->setSpringK(5);
+		chainGen->setSpringK(5);
 		break;
 	}
 	case 'N':
 	{
-		particleGen4->setSpringK(-5);
+		chainGen->setSpringK(-5);
 		break;
 	}
 	case 'V':
 	{
-
+		wgAux->turnActive();
 	}
 	default:
 		break;

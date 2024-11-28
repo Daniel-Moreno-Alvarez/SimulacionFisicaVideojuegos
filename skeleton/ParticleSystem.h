@@ -22,15 +22,18 @@ public:
 	ParticleSystem();
 	ParticleSystem(Vector3 Pos);
 	~ParticleSystem();
+
 	Vector3 UniformDistributionVec(float nim, float max);
 	float UniformDistribution(float min, float max);
 	Vector3 NormalDistributionVec(float med, float destip);
 	float NormalDistribution(float med, float destip);
 	void integrate(double t);
 	void checkParticles(double t);
+	void checkForceGenerator(double t);
 	void fireTipe();
 	void explosionTipe();
 	void staticTipe();
+
 	void generateParticle();
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);
 	void setSpringK(double _k);

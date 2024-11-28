@@ -6,7 +6,7 @@ SpringForceGenerator::SpringForceGenerator(double _k, double _resting_length, Pa
 	resting_length(_resting_length),
 	other(_other)
 {
-	maxForceMagnitude = 20;
+	maxForceMagnitude = 50;
 }
 
 void SpringForceGenerator::addForce(Particle* particle, double t)

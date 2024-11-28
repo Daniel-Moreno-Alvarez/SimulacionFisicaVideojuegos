@@ -15,11 +15,15 @@ public:
 	virtual bool isSpring() const { return false; }
 	virtual void setK(double _k) {};
 	virtual void interact() {};
+	bool isActive() const { return active; };
+	void setActive(bool _active) { active = _active; };
+	void turnActive() { active = !active; }
 protected:
 	std::vector<Particle*> particles;
 	physx::PxTransform pose;
 	Vector3 force;
 	double maxForceMagnitude;
 	Vector3 volume;
+	bool active = true;
 };
 
