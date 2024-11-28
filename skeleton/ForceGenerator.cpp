@@ -1,5 +1,12 @@
 #include "ForceGenerator.h"
 
+ForceGenerator::ForceGenerator() :
+	pose(Vector3(0, 0, 0)),
+	force(Vector3(0, 0, 0)),
+	volume(Vector3(0, 0, 0))
+{
+}
+
 ForceGenerator::ForceGenerator(Vector3 _pose, Vector3 _force) :
 	pose(_pose),
 	force(_force),

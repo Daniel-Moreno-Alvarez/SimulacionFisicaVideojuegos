@@ -1,0 +1,13 @@
+#include "AnchoredSpringFG.h"
+
+AnchoredSpringFG::AnchoredSpringFG(double _k, double resting, const Vector3& _pos) :
+	SpringForceGenerator(_k, resting, nullptr)
+{
+	other = new Particle(_pos, { 0,0,0 }, { 0,0,0 }, 1.0, 1.0, CUBE);
+	other->SetImmovable(true);
+}
+
+AnchoredSpringFG::~AnchoredSpringFG()
+{
+	delete other;
+}

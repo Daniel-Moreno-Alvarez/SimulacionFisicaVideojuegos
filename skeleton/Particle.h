@@ -1,9 +1,15 @@
 #pragma once
 #include "RenderUtils.hpp"
 #include <iostream>
+enum FORM {
+	SPHERE,
+	CUBE
+};
+
 class Particle
 {
 public:
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping);
 	~Particle();
 
@@ -15,6 +21,7 @@ public:
 	void SetLifeLimit(float LifeLimit);
 	void SetColor(Vector4 color);
 	void SetMass(float mass);
+	void SetImmovable(bool _immovable) { immovable = _immovable; };
 	bool ItsAlive();
 	void addForce(Vector3 force);
 private:
@@ -28,5 +35,6 @@ private:
 	float factor = 10;
 	float age = 0;
 	float lifeLimit;
+	bool immovable = false;
 };
 

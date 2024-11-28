@@ -41,6 +41,7 @@ ContactReportCallback gContactReportCallback;
 ParticleSystem* particleGen1;
 ParticleSystem* particleGen2;
 ParticleSystem* particleGen3;
+ParticleSystem* particleGen4;
 
 GravityGenerator* gg;
 WindGenerator* wg;
@@ -116,8 +117,12 @@ void initPhysics(bool interactive)
 	particleGen3 = new ParticleSystem(position3);
 	particleGen3->staticTipe();
 
+	particleGen4 = new ParticleSystem({ 0,0,0 });
+
 	gg = new GravityGenerator(position1);
 	particleGen1->addForceGenerator(gg);
+	particleGen4->addForceGenerator(gg);
+	particleGen4->generateSpringDemo(5, {0, 60, 0});
 
 	wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
 	particleGen1->addForceGenerator(wg);
@@ -125,7 +130,7 @@ void initPhysics(bool interactive)
 	vg = new VortexGenerator(position2, 60, 1);
 	particleGen2->addForceGenerator(vg);
 
-	eg = new ExplosionGenerator(position3, 30, 50);
+	eg = new ExplosionGenerator(position3, 30, 500);
 	particleGen3->addForceGenerator(eg);
 
 }
@@ -152,9 +157,10 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 
-	particleGen1->integrate(t);
-	particleGen2->integrate(t);
-	particleGen3->integrate(t);
+	//particleGen1->integrate(t);
+	//particleGen2->integrate(t);
+	//particleGen3->integrate(t);
+	particleGen4->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -206,6 +212,20 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		eg->interact();
 		break;
 	}
+	case 'M':
+	{
+		particleGen4->setSpringK(5);
+		break;
+	}
+	case 'N':
+	{
+		particleGen4->setSpringK(-5);
+		break;
+	}
+	case 'V':
+	{
+
+	}
 	default:
 		break;
 	}
@@ -216,7 +236,6 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
 }
-
 
 int main(int, const char*const*)
 {

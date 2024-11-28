@@ -6,7 +6,7 @@ ExplosionGenerator::ExplosionGenerator(Vector3 _pose, float _radio, float _inten
     radio(_radio),
     lastTime(0.0),
     start(false),
-    finishTime(5)
+    finishTime(1)
 {
 }
 

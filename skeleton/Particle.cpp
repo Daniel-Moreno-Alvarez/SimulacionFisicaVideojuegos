@@ -1,17 +1,39 @@
 #include "Particle.h"
 #include <cmath>
 
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM form)
+    : pose(Pos), vel(Vel), acce(Acce), damping(Damping) {
+    renderItem = new RenderItem();
+    renderItem->transform = &pose;
+    switch (form)
+    {
+    case SPHERE:
+        renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
+        break;
+    case CUBE:
+        renderItem->shape = CreateShape(physx::PxBoxGeometry(size, size, size));
+        break;
+    default:
+        renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
+        break;
+    }
+    renderItem->color = { 1, 1, 0, 1 };
+    RegisterRenderItem(renderItem);
+    mass = 1.0;
+    age = 0;
+    lifeLimit = NULL;
+}
+
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping)
     : pose(Pos),  vel(Vel), acce(Acce), damping(Damping){
     renderItem = new RenderItem();
     renderItem->transform = &pose;
     renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
     renderItem->color = { 1, 1, 0, 1 };
-    
+    RegisterRenderItem(renderItem);
     mass = 1.0;
     age = 0;
     lifeLimit = NULL;
-
 }
 
 Particle::~Particle()
@@ -39,7 +61,9 @@ void Particle::integrate(double t) {
 
     vel += (acce + acce_acum) * t;
     vel *= pow(damping, t);
-    pose.p += vel * t;
+    if (!immovable){
+        pose.p += vel * t;
+    }
 
     acce_acum = {0, 0, 0};
 }

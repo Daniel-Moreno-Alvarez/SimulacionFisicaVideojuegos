@@ -1,5 +1,7 @@
 #include <random>
 #include "ParticleSystem.h"
+#include "SpringForceGenerator.h"
+#include "AnchoredSpringFG.h"
 
 ParticleSystem::ParticleSystem() : pose({ 0, 0, 0 }), emisionRange(0.0),
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
@@ -66,7 +68,7 @@ void ParticleSystem::staticTipe()
 }
 
 void ParticleSystem::generateParticle() {
-	Particle* p;
+	Particle* p = nullptr;
 	switch (setTipe)
 	{
 	case 1: // fuego
@@ -81,7 +83,6 @@ void ParticleSystem::generateParticle() {
 
 		p->SetLifeLimit(NormalDistribution(1, 0.5));
 		p->SetColor({ 1,0,0,1 });
-		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
 		break;
@@ -97,7 +98,6 @@ void ParticleSystem::generateParticle() {
 
 		p->SetLifeLimit(1.0);
 		p->SetColor({ 0,1,1,1 });
-		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
 		break;
@@ -113,27 +113,83 @@ void ParticleSystem::generateParticle() {
 		p->SetMass(mass);
 		p->SetLifeLimit(10.0);
 		p->SetColor({ 0,1,1,1 });
-		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
 		break;
 	}
-	default: // chispas
+	case 4: // chispas
 	{
 		Vector3 vel = { UniformDistribution(-2, 2), UniformDistribution(15, 20), UniformDistribution(-2, 2) };
 
 		p = new Particle(pose.p, vel, Vector3(0,0,0), 0.5, Damping);
 		p->SetLifeLimit(10.0);
-		RegisterRenderItem(p->getRenderItem());
 		particles->push_back(p);
 
 		break;
 	}
+	default:
+		break;
 	}
 
-	for (auto e : forcegenerators)
+	if (p)
 	{
-		e->addParticle(p);
+		for (auto e : forcegenerators)
+		{
+			e->addParticle(p);
+		}
+	}
+}
+
+void ParticleSystem::generateSpringDemo(unsigned int _num, Vector3 anchor_pos)
+{
+	limitRange = 1000.0;
+	setTipe = 0;
+
+	double _k = 5;
+
+	float resting_length = 5;
+	float auxDamping = 0.6;
+
+	AnchoredSpringFG* f3 = new AnchoredSpringFG(_k, resting_length, pose.p + anchor_pos);
+	double aux = -5;
+	Vector3 auxPos = pose.p + anchor_pos + Vector3(0, aux, aux);
+	Particle* anterior = new Particle(auxPos, { 0,0,0 }, { 0,0,0 }, 1.0, auxDamping);
+	anterior->SetColor({ 1, 0, 1 , 1 });
+	for (auto fg : forcegenerators) {
+		fg->addParticle(anterior);
+	}
+	f3->addParticle(anterior);
+	forcegenerators.push_back(f3);
+	particles->push_back(anterior);
+
+	for (int i = 1; i < _num; i++)
+	{
+		aux = (i + 1) * -5;
+		auxPos = pose.p + anchor_pos + Vector3(0, aux, aux);
+		Particle* nueva = new Particle(auxPos, { 0,0,0 }, { 0,0,0 }, 1.0, auxDamping);
+		float colorAux = i * 0.1;
+		nueva->SetColor({1, colorAux, 1 , 1});
+		for (auto fg : forcegenerators) {
+			if (!fg->isSpring())
+			{
+				fg->addParticle(nueva);
+			}
+		}
+		SpringForceGenerator* f1 = new SpringForceGenerator(_k, resting_length, nueva);
+		SpringForceGenerator* f2 = new SpringForceGenerator(_k, resting_length, anterior);
+		f2->addParticle(nueva);
+		forcegenerators.push_back(f1);
+		forcegenerators.push_back(f2);
+		particles->push_back(nueva);
+
+		anterior = nueva;
+	}
+}
+
+void ParticleSystem::setSpringK(double _k)
+{
+	for (auto fg : forcegenerators) {
+		fg->setK(_k);
 	}
 }
 

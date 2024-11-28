@@ -14,7 +14,7 @@ private:
 	float lastTime = 0;
 	float Damping = 0.98;
 	const Vector3 gravity = {0,  -9.8 , 0};
-	int setTipe = 0;
+	int setTipe = 4;
 
 	std::vector<ForceGenerator*> forcegenerators;
 
@@ -27,11 +27,13 @@ public:
 	Vector3 NormalDistributionVec(float med, float destip);
 	float NormalDistribution(float med, float destip);
 	void integrate(double t);
+	void checkParticles(double t);
 	void fireTipe();
 	void explosionTipe();
 	void staticTipe();
 	void generateParticle();
-	void checkParticles(double t);
+	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);
+	void setSpringK(double _k);
 
 	void addForceGenerator(ForceGenerator* fg);
 };
