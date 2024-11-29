@@ -9,6 +9,7 @@ enum FORM {
 class Particle
 {
 public:
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float Damping);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping);
 	~Particle();

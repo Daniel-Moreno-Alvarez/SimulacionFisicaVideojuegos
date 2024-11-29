@@ -39,20 +39,25 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+/////////// PRACTICA 3
 ParticleSystem* particleGen1;
 ParticleSystem* particleGen2;
 ParticleSystem* particleGen3;
-ParticleSystem* chainGen;
-
 GravityGenerator* gg;
 WindGenerator* wg;
 VortexGenerator* vg;
 ExplosionGenerator* eg;
 
+/////////// PRACTICA 4
+ParticleSystem* chainGen;
 WindGenerator* wgAux;
-
 ElasticStripFG* elasticFG;
 
+/////////// PRACTICA 4.3
+
+Particle* pool;
+Particle* box;
+/////////// PRACTICA 1
 RenderItem* ejeX;
 RenderItem* ejeY;
 RenderItem* ejeZ;
@@ -150,6 +155,14 @@ void initPhysics(bool interactive)
 	chainGen->addForceGenerator(wgAux);
 	wgAux->setActive(false);
 
+	/////////// PRACTICA 4.3
+
+	Vector3 auxSize = { 30,10,30 };
+	pool = new Particle({0,0,0}, { 0,0,0 }, { 0,0,0 }, auxSize, Damping);
+	pool->SetColor({0,1,1,1});
+
+	box = new Particle({ 0,60,0 }, { 0,0,0 }, { 0,0,0 }, 1.0, Damping, CUBE);
+	gg->addParticle(box);
 }
 
 
@@ -177,7 +190,7 @@ void stepPhysics(bool interactive, double t)
 	//particleGen1->integrate(t);
 	//particleGen2->integrate(t);
 	//particleGen3->integrate(t);
-	chainGen->integrate(t);
+	//chainGen->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);

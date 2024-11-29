@@ -1,6 +1,18 @@
 #include "Particle.h"
 #include <cmath>
 
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float Damping)
+    : pose(Pos), vel(Vel), acce(Acce), damping(Damping) {
+    renderItem = new RenderItem();
+    renderItem->transform = &pose;
+    renderItem->shape = CreateShape(physx::PxBoxGeometry(size));
+    renderItem->color = { 1, 1, 0, 1 };
+    RegisterRenderItem(renderItem);
+    mass = 1.0;
+    age = 0;
+    lifeLimit = NULL;
+}
+
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM form)
     : pose(Pos), vel(Vel), acce(Acce), damping(Damping) {
     renderItem = new RenderItem();

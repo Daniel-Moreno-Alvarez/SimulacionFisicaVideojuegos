@@ -49,6 +49,9 @@
     <ClCompile Include="ElasticStripFG.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="PushForceGenerator.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3D.h">
@@ -98,6 +101,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="ElasticStripFG.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="PushForceGenerator.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
