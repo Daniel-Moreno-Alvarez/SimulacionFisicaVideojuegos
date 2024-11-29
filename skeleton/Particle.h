@@ -19,6 +19,7 @@ public:
 	physx::PxTransform getTransform();
 	Vector3 getVelocity();
 	float getMass();
+	Vector3 getVolume();
 	void SetLifeLimit(float LifeLimit);
 	void SetColor(Vector4 color);
 	void SetMass(float mass);
@@ -37,5 +38,6 @@ private:
 	float age = 0;
 	float lifeLimit;
 	bool immovable = false;
+	Vector3 volume;
 };
 
