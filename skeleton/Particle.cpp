@@ -2,7 +2,7 @@
 #include <cmath>
 
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float Damping)
-    : pose(Pos), vel(Vel), acce(Acce), damping(Damping) {
+    : pose(Pos), vel(Vel), acce(Acce), damping(Damping), volume(size){
     renderItem = new RenderItem();
     renderItem->transform = &pose;
     renderItem->shape = CreateShape(physx::PxBoxGeometry(size));
@@ -14,7 +14,7 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float D
 }
 
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM form)
-    : pose(Pos), vel(Vel), acce(Acce), damping(Damping) {
+    : pose(Pos), vel(Vel), acce(Acce), damping(Damping), volume({size,size,size}) {
     renderItem = new RenderItem();
     renderItem->transform = &pose;
     switch (form)
@@ -37,7 +37,7 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Dam
 }
 
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping)
-    : pose(Pos),  vel(Vel), acce(Acce), damping(Damping){
+    : pose(Pos),  vel(Vel), acce(Acce), damping(Damping), volume({ size,size,size }) {
     renderItem = new RenderItem();
     renderItem->transform = &pose;
     renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
@@ -113,4 +113,9 @@ Vector3 Particle::getVelocity()
 float Particle::getMass()
 {
     return mass;
+}
+
+Vector3 Particle::getVolume()
+{
+    return volume;
 }
