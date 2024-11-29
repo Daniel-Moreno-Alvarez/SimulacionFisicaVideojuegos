@@ -6,7 +6,6 @@ SpringForceGenerator::SpringForceGenerator(double _k, double _resting_length, Pa
 	resting_length(_resting_length),
 	other(_other)
 {
-	maxForceMagnitude = 50;
 }
 
 void SpringForceGenerator::addForce(Particle* particle, double t)
@@ -17,8 +16,5 @@ void SpringForceGenerator::addForce(Particle* particle, double t)
 	const float delta_x = length - resting_length;
 
 	Vector3 finalForce = relative_pos_vector * delta_x * K;
-	if (finalForce.magnitude() > maxForceMagnitude) { // Corrige la fuerza si es demasido alta
-		finalForce = finalForce.getNormalized() * maxForceMagnitude;
-	}
 	particle->addForce(finalForce);
 }

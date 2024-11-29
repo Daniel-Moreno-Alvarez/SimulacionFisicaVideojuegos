@@ -11,6 +11,8 @@ private:
 	std::vector<Particle*>* particles;
 	float generationTimeInterval;
 	int particlesPerEmision;
+	int maxEmisions = NULL;
+	int numEmisions = 0;
 	float lastTime = 0;
 	float Damping = 0.98;
 	const Vector3 gravity = {0,  -9.8 , 0};
@@ -33,10 +35,10 @@ public:
 	void fireTipe();
 	void explosionTipe();
 	void staticTipe();
+	void stripLineTipe(int num);
 
-	void generateParticle();
+	void generateParticle(int t);
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);
-	void setSpringK(double _k);
 
 	void addForceGenerator(ForceGenerator* fg);
 };

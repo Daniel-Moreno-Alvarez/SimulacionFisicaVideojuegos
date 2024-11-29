@@ -15,6 +15,7 @@
 #include "WindGenerator.h";
 #include "VortexGenerator.h"
 #include "ExplosionGenerator.h"
+#include "ElasticStripFG.h"
 
 #include <iostream>
 
@@ -49,6 +50,8 @@ VortexGenerator* vg;
 ExplosionGenerator* eg;
 
 WindGenerator* wgAux;
+
+ElasticStripFG* elasticFG;
 
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -135,14 +138,17 @@ void initPhysics(bool interactive)
 
 	/////////// PRACTICA 4
 
-	chainGen = new ParticleSystem({ 0,0,0 });
+	Vector3 position4 = {0, 50, 0};
+	chainGen = new ParticleSystem(position4);
+	chainGen->stripLineTipe(10);
+
+	elasticFG = new ElasticStripFG(20, 2, position4);
 	chainGen->addForceGenerator(gg);
+	chainGen->addForceGenerator(elasticFG);
 
 	wgAux = new WindGenerator({ 0, 30,0}, { 30, 30, 30 }, { 0, 0, -20 });
 	chainGen->addForceGenerator(wgAux);
 	wgAux->setActive(false);
-
-	chainGen->generateSpringDemo(5, { 0, 60, 0 });
 
 }
 
@@ -225,12 +231,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case 'M':
 	{
-		chainGen->setSpringK(5);
+		elasticFG->setK(5);
 		break;
 	}
 	case 'N':
 	{
-		chainGen->setSpringK(-5);
+		elasticFG->setK(-5);
 		break;
 	}
 	case 'V':

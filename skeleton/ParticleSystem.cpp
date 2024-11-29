@@ -27,12 +27,16 @@ ParticleSystem::~ParticleSystem()
 }
 void ParticleSystem::integrate(double t) {
 	lastTime += t;
-	if (lastTime > generationTimeInterval) {
+	if (lastTime > generationTimeInterval && (maxEmisions == NULL || numEmisions < maxEmisions)) {
 		for (size_t i = 0; i < particlesPerEmision; i++)
 		{
-			generateParticle();
+			generateParticle(i);
 		}
 		lastTime = 0;
+
+		if (maxEmisions != NULL) {
+			numEmisions++;
+		}
 	}
 	checkForceGenerator(t);
 	checkParticles(t);
@@ -65,7 +69,15 @@ void ParticleSystem::staticTipe()
 	setTipe = 3;
 }
 
-void ParticleSystem::generateParticle() {
+void ParticleSystem::stripLineTipe(int num)
+{
+	maxEmisions = 1;
+	limitRange = 500.0;
+	particlesPerEmision = num;
+	setTipe = 5;
+}
+
+void ParticleSystem::generateParticle(int i) {
 	Particle* p = nullptr;
 	switch (setTipe)
 	{
@@ -125,15 +137,28 @@ void ParticleSystem::generateParticle() {
 
 		break;
 	}
+	case 5: // para la cadena
+	{
+		float auxPos = (i + 1) * -10;
+		Vector3 pos = pose.p + Vector3(0, auxPos,0);
+		Vector3 vel = { 0,0,0 };
+		Vector3 acce = { 0,0,0 };
+		float auxDamping = 0.8;
+		p = new Particle(pos, vel, acce, 1.0, auxDamping);
+		float auxCol = 0.1 * i;
+		p->SetColor({ 1,auxCol,1,1 });
+		particles->push_back(p);
+		break;
+	}
 	default:
 		break;
 	}
 
 	if (p)
 	{
-		for (auto e : forcegenerators)
+		for (auto fg : forcegenerators)
 		{
-			e->addParticle(p);
+			fg->addParticle(p);
 		}
 	}
 }
@@ -184,13 +209,6 @@ void ParticleSystem::generateSpringDemo(unsigned int _num, Vector3 anchor_pos)
 		particles->push_back(nueva);
 
 		anterior = nueva;
-	}
-}
-
-void ParticleSystem::setSpringK(double _k)
-{
-	for (auto fg : forcegenerators) {
-		fg->setK(_k);
 	}
 }
 
