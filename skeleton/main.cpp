@@ -148,7 +148,7 @@ void initPhysics(bool interactive)
 
 	Vector3 position4 = {20, 50, -20};
 	chainGen = new ParticleSystem(position4);
-	chainGen->stripLineTipe(20); // Para poner el numero de particulas a la cadena
+	chainGen->stripLineTipe(10); // Para poner el numero de particulas a la cadena
 
 	elasticFG = new ElasticStripFG(20, 2, position4);
 	chainGen->addForceGenerator(gg);
