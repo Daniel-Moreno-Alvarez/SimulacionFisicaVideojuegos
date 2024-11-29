@@ -36,6 +36,7 @@ public:
 	void explosionTipe();
 	void staticTipe();
 	void stripLineTipe(int num);
+	void RainCubeTipe();
 
 	void generateParticle(int t);
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);

@@ -4,7 +4,9 @@ PushForceGenerator::PushForceGenerator(Vector3 _pos, Vector3 _volume, double _li
 	ForceGenerator(_pos, _volume, Vector3(0,0,0)),
 	liquid_density(_liquid_density)
 {
-
+	Vector3 auxPos = _pos + Vector3(0,volume.y,0);
+	surface = new Particle(auxPos, { 0,0,0 }, { 0,0,0 }, {_volume.x,0.1,volume.z }, 0.98);
+	surface->SetColor({0,1,1,1});
 }
 
 void PushForceGenerator::addForce(Particle* particle, double t)
@@ -12,7 +14,7 @@ void PushForceGenerator::addForce(Particle* particle, double t)
 	float h0 = volume.y;
 	float h = particle->getTransform().p.y;
 	Vector3 auxVol = particle->getVolume();
-	float _height = auxVol.y * 2;
+	float _height = auxVol.y;
 	float _volume = auxVol.y * auxVol.x * auxVol.z;
 	float immersed;
 	if (h - h0 > _height * 0.5) {

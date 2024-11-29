@@ -16,6 +16,7 @@
 #include "VortexGenerator.h"
 #include "ExplosionGenerator.h"
 #include "ElasticStripFG.h"
+#include "PushForceGenerator.h"
 
 #include <iostream>
 
@@ -55,8 +56,9 @@ ElasticStripFG* elasticFG;
 
 /////////// PRACTICA 4.3
 
-Particle* pool;
-Particle* box;
+ParticleSystem* particleGen4;
+PushForceGenerator* pushFG;
+
 /////////// PRACTICA 1
 RenderItem* ejeX;
 RenderItem* ejeY;
@@ -71,6 +73,7 @@ std::vector<Particle*> particulas;
 const float Damping = 0.98f;
 const float speed = 50.0f;
 const float gravity = -9.8f;
+const float waterDensity = 1000;
 
 void Ejes() {
 
@@ -143,26 +146,28 @@ void initPhysics(bool interactive)
 
 	/////////// PRACTICA 4
 
-	Vector3 position4 = {0, 50, 0};
+	Vector3 position4 = {20, 50, -20};
 	chainGen = new ParticleSystem(position4);
-	chainGen->stripLineTipe(10);
+	chainGen->stripLineTipe(20); // Para poner el numero de particulas a la cadena
 
 	elasticFG = new ElasticStripFG(20, 2, position4);
 	chainGen->addForceGenerator(gg);
 	chainGen->addForceGenerator(elasticFG);
 
-	wgAux = new WindGenerator({ 0, 30,0}, { 30, 30, 30 }, { 0, 0, -20 });
+	wgAux = new WindGenerator(position4 + Vector3(0, -20, 0), {40, 40, 40}, {0, 0, -40});
 	chainGen->addForceGenerator(wgAux);
 	wgAux->setActive(false);
 
 	/////////// PRACTICA 4.3
 
-	Vector3 auxSize = { 30,10,30 };
-	pool = new Particle({0,0,0}, { 0,0,0 }, { 0,0,0 }, auxSize, Damping);
-	pool->SetColor({0,1,1,1});
+	Vector3 position5 = {-20, -10, 20};
+	Vector3 volume1 = { 30,40,30 };
+	particleGen4 = new ParticleSystem(position5 + Vector3(0, 50, 0));
+	particleGen4->RainCubeTipe();
 
-	box = new Particle({ 0,60,0 }, { 0,0,0 }, { 0,0,0 }, 1.0, Damping, CUBE);
-	gg->addParticle(box);
+	pushFG = new PushForceGenerator(position5, volume1, waterDensity);
+	particleGen4->addForceGenerator(pushFG);
+	particleGen4->addForceGenerator(gg);
 }
 
 
@@ -190,7 +195,8 @@ void stepPhysics(bool interactive, double t)
 	//particleGen1->integrate(t);
 	//particleGen2->integrate(t);
 	//particleGen3->integrate(t);
-	//chainGen->integrate(t);
+	particleGen4->integrate(t);
+	chainGen->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -226,8 +232,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
 	case 'P':
 	{
 		Camera* cam = GetCamera();

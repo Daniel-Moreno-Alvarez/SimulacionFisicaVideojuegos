@@ -1,5 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
+
 class PushForceGenerator : public ForceGenerator
 {
 public:
@@ -8,5 +9,6 @@ public:
 	void addForce(Particle* particle, double t) override;
 protected:
 	double liquid_density;
+	Particle* surface;
 };
 

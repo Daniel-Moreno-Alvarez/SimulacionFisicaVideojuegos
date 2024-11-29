@@ -77,6 +77,16 @@ void ParticleSystem::stripLineTipe(int num)
 	setTipe = 5;
 }
 
+void ParticleSystem::RainCubeTipe()
+{
+	maxEmisions = 4;
+	emisionRange = 20.0;
+	limitRange = 100.0;
+	particlesPerEmision = 1;
+	generationTimeInterval = 2.0;
+	setTipe = 6;
+}
+
 void ParticleSystem::generateParticle(int i) {
 	Particle* p = nullptr;
 	switch (setTipe)
@@ -144,9 +154,22 @@ void ParticleSystem::generateParticle(int i) {
 		Vector3 vel = { 0,0,0 };
 		Vector3 acce = { 0,0,0 };
 		float auxDamping = 0.8;
-		p = new Particle(pos, vel, acce, 1.0, auxDamping);
+		p = new Particle(pos, vel, acce, 1.0, Damping);
 		float auxCol = 0.1 * i;
 		p->SetColor({ 1,auxCol,1,1 });
+		particles->push_back(p);
+		break;
+	}
+	case 6: //lluvia de cubos
+	{
+		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), 0, UniformDistribution(-emisionRange, emisionRange));
+		Vector3 vel = { 0,0,0 };
+		Vector3 acce = { 0,0,0 };
+		float size = UniformDistribution(1.8 , 3.0);
+		p = new Particle(pos, vel, acce, size, 0.8, CUBE);
+		p->SetMass(4000.0);
+		float auxCol = UniformDistribution(0.0, 0.5);
+		p->SetColor({ 1,1, auxCol,1 });
 		particles->push_back(p);
 		break;
 	}
