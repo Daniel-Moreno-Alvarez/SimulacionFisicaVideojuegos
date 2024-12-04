@@ -52,6 +52,7 @@
     <ClCompile Include="PushForceGenerator.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="RigidSolid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3D.h">
@@ -106,6 +107,7 @@
     <ClInclude Include="PushForceGenerator.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="RigidSolid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

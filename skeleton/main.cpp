@@ -168,6 +168,19 @@ void initPhysics(bool interactive)
 	pushFG = new PushForceGenerator(position5, volume1, waterDensity);
 	particleGen4->addForceGenerator(pushFG);
 	particleGen4->addForceGenerator(gg);
+
+	/////////// PRACTICA 5
+	PxRigidDynamic* solid;
+	solid = gPhysics->createRigidDynamic(PxTransform({ 0, 30, 0 }));
+	solid->setLinearVelocity({ 0, 10, 0 });
+	solid->setAngularVelocity({ 0,0,0 });
+	PxShape* shape = CreateShape(PxBoxGeometry(5, 5, 5));
+	solid->attachShape(*shape);
+	PxRigidBodyExt::updateMassAndInertia(*solid, 0.15);
+	gScene->addActor(*solid);
+	solid->addForce({1,10,1}, PxForceMode::eACCELERATION, false);
+	RenderItem* renderItem = new RenderItem(shape, solid, {0.8, 0.8, 0.8, 1});
+	//PxSimulationEventCallback
 }
 
 
