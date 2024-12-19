@@ -281,25 +281,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		particulas.push_back(bala);
 		break;
 	}
-	case 'E':
-	{
-		eg->interact();
-		break;
-	}
-	case 'M':
-	{
-		elasticFG->setK(5);
-		break;
-	}
-	case 'N':
-	{
-		elasticFG->setK(-5);
-		break;
-	}
-	case 'V':
-	{
-		wgAux->turnActive();
-	}
 	default:
 		break;
 	}
