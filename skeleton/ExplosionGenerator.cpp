@@ -40,6 +40,24 @@ void ExplosionGenerator::addForce(Particle* particle, double t)
     }
 }
 
+void ExplosionGenerator::addForce(RigidSolid* particle, double t)
+{
+    if (start)
+    {
+        Vector3 particlePos = particle->getTransform().p;
+        Vector3 center = pose.p;
+
+        Vector3 direction = particlePos - center;
+        float distance = direction.magnitude();
+
+        // Solo se aplica la fuerza dependiendo del radio
+        if (distance <= radio) {
+            Vector3 finalForce = (intensity / (distance * distance)) * direction * pow(2.711828, t / lastTime);
+            particle->addForce(finalForce);
+        }
+    }
+}
+
 void ExplosionGenerator::interact()
 {
     start = true;

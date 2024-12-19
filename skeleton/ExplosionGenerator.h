@@ -8,6 +8,7 @@ public:
     ~ExplosionGenerator() = default;
     void update(double t) override;
     void addForce(Particle* particle, double t) override;
+    void addForce(RigidSolid* particle, double t) override;
     void interact() override;
 private:
     float intensity = 1.0;

@@ -3,13 +3,15 @@
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringFG.h"
 
-ParticleSystem::ParticleSystem() : pose({ 0, 0, 0 }), emisionRange(0.0),
+ParticleSystem::ParticleSystem(physx::PxScene* _scene) : pose({ 0, 0, 0 }), emisionRange(0.0), scene(_scene),
 limitRange(30.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
+	rigidSolids = new std::vector<RigidSolid*>;
 }
-ParticleSystem::ParticleSystem(Vector3 pos) : pose(pos), emisionRange(0.0), 
+ParticleSystem::ParticleSystem(physx::PxScene* _scene, Vector3 pos) : pose(pos), emisionRange(0.0), scene(_scene),
 limitRange(90.0), generationTimeInterval(0.05), particlesPerEmision(1) {
 	particles = new std::vector<Particle*>;
+	rigidSolids = new std::vector<RigidSolid*>;
 }
 ParticleSystem::~ParticleSystem()
 {
@@ -18,6 +20,12 @@ ParticleSystem::~ParticleSystem()
 		delete e;
 	}
 	delete particles;
+
+	for (auto e : *rigidSolids)
+	{
+		delete e;
+	}
+	delete rigidSolids;
 
 	for (auto e : forcegenerators)
 	{
@@ -85,6 +93,16 @@ void ParticleSystem::RainCubeTipe()
 	particlesPerEmision = 1;
 	generationTimeInterval = 2.0;
 	setTipe = 6;
+}
+
+void ParticleSystem::solidCubesTipe()
+{
+	maxEmisions = 200;
+	emisionRange = 20.0;
+	limitRange = 100.0;
+	particlesPerEmision = 1;
+	generationTimeInterval = 0.1;
+	setTipe = 7;
 }
 
 void ParticleSystem::generateParticle(int i) {
@@ -182,6 +200,31 @@ void ParticleSystem::generateParticle(int i) {
 		for (auto fg : forcegenerators)
 		{
 			fg->addParticle(p);
+		}
+	}
+
+	RigidSolid* rs = nullptr;
+
+	switch (setTipe)
+	{
+	case 7: // cubos solid rigids
+	{
+		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), 0, UniformDistribution(-emisionRange, emisionRange));
+		Vector3 size = { 1, 1, 1 };
+		rs = new RigidSolid(scene, pos, size);
+		
+		break;
+	}
+	default:
+		break;
+	}
+
+	if (rs)
+	{
+		rigidSolids->push_back(rs);
+		for (auto fg : forcegenerators)
+		{
+			fg->addRigidSolid(rs);
 		}
 	}
 }
@@ -288,6 +331,21 @@ void ParticleSystem::checkParticles(double t) {
 			++it;
 		}
 	}
+
+	for (auto it = rigidSolids->begin(); it != rigidSolids->end(); )
+	{
+		if (!(*it)->ItsAlive() || ((*it)->getTransform().p - pose.p).magnitude() > limitRange)
+		{
+			delete* it;
+			it = rigidSolids->erase(it);
+		}
+		else
+		{
+			(*it)->integrate(t);
+			++it;
+		}
+	}
+
 }
 
 void ParticleSystem::checkForceGenerator(double t)

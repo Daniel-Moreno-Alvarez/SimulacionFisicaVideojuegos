@@ -7,6 +7,7 @@ public:
     VortexGenerator(Vector3 _pose, float _radio, float _intensity);
     ~VortexGenerator() = default;
     virtual void addForce(Particle* particle, double t) override;
+    virtual void addForce(RigidSolid* particle, double t) override;
 private:
     float intensity = 1.0;
 };

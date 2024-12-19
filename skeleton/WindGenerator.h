@@ -6,6 +6,7 @@ public:
 	WindGenerator(Vector3 _pose, Vector3 _volume, Vector3 _force);
 	~WindGenerator() = default;
 	void addForce(Particle* particle, double t) override;
+	void addForce(RigidSolid* particle, double t) override;
 private:
 	float k1 = 1.0;
 };

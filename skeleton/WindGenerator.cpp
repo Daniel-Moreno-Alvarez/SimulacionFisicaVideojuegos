@@ -12,3 +12,9 @@ void WindGenerator::addForce(Particle* particle, double t)
     particle->addForce(_force);
 }
 
+void WindGenerator::addForce(RigidSolid* rs, double t)
+{
+    Vector3 _force = k1 * (force - rs->getVelocity());
+    rs->addForce(_force);
+}
+

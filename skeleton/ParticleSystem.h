@@ -1,14 +1,17 @@
 #pragma once
 #include "RenderUtils.hpp"
 #include "ForceGenerator.h"
+#include "RigidSolid.h"
 
 class ParticleSystem
 {
 private:
+	physx::PxScene* scene;
 	physx::PxTransform pose;
 	float emisionRange;
 	float limitRange;
 	std::vector<Particle*>* particles;
+	std::vector<RigidSolid*>* rigidSolids;
 	float generationTimeInterval;
 	int particlesPerEmision;
 	int maxEmisions = NULL;
@@ -21,8 +24,8 @@ private:
 	std::vector<ForceGenerator*> forcegenerators;
 
 public:
-	ParticleSystem();
-	ParticleSystem(Vector3 Pos);
+	ParticleSystem(physx::PxScene* scene);
+	ParticleSystem(physx::PxScene* scene, Vector3 Pos);
 	~ParticleSystem();
 
 	Vector3 UniformDistributionVec(float nim, float max);
@@ -37,6 +40,7 @@ public:
 	void staticTipe();
 	void stripLineTipe(int num);
 	void RainCubeTipe();
+	void solidCubesTipe();
 
 	void generateParticle(int t);
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);

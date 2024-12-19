@@ -9,6 +9,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
+#include "RigidSolid.h"
 #include "Vector3D.h"
 #include "ParticleSystem.h"
 #include "GravityGenerator.h"
@@ -41,9 +42,6 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 /////////// PRACTICA 3
-ParticleSystem* particleGen1;
-ParticleSystem* particleGen2;
-ParticleSystem* particleGen3;
 GravityGenerator* gg;
 WindGenerator* wg;
 VortexGenerator* vg;
@@ -74,6 +72,11 @@ const float Damping = 0.98f;
 const float speed = 50.0f;
 const float gravity = -9.8f;
 const float waterDensity = 1000;
+
+////////// PRACTICA 5
+ParticleSystem* particleGen1;
+ParticleSystem* particleGen2;
+RigidSolid* solid;
 
 void Ejes() {
 
@@ -110,7 +113,7 @@ void initPhysics(bool interactive)
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
 	gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
@@ -120,67 +123,89 @@ void initPhysics(bool interactive)
 	////////////////////////////////////////
 
 	Ejes();
-	Vector3 position1 = { 0, 30, 0 };
-	particleGen1 = new ParticleSystem(position1);
-	particleGen1->staticTipe();
-	Vector3 position2 = { -40, 30, 80 };
-	particleGen2 = new ParticleSystem(position2);
-	particleGen2->staticTipe();
-	Vector3 position3 = { 80, 30, -40 };
-	particleGen3 = new ParticleSystem(position3);
-	particleGen3->staticTipe();
+	//Vector3 position1 = { 0, 30, 0 };
+	//particleGen1 = new ParticleSystem(gScene,position1);
+	//particleGen1->staticTipe();
+	//Vector3 position2 = { -40, 30, 80 };
+	//particleGen2 = new ParticleSystem(gScene,position2);
+	//particleGen2->staticTipe();
+	//Vector3 position3 = { 80, 30, -40 };
+	//particleGen3 = new ParticleSystem(gScene,position3);
+	//particleGen3->staticTipe();
 
-	/////////// PRACTICA 3
+	///////////// PRACTICA 3
 
-	gg = new GravityGenerator(position1);
-	particleGen1->addForceGenerator(gg);
+	//gg = new GravityGenerator(position1);
+	//particleGen1->addForceGenerator(gg);
 
-	wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
-	particleGen1->addForceGenerator(wg);
+	//wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
+	//particleGen1->addForceGenerator(wg);
 
-	vg = new VortexGenerator(position2, 60, 1);
-	particleGen2->addForceGenerator(vg);
+	//vg = new VortexGenerator(position2, 60, 1);
+	//particleGen2->addForceGenerator(vg);
 
-	eg = new ExplosionGenerator(position3, 30, 500);
-	particleGen3->addForceGenerator(eg);
+	//eg = new ExplosionGenerator(position3, 30, 500);
+	//particleGen3->addForceGenerator(eg);
 
 	/////////// PRACTICA 4
 
-	Vector3 position4 = {20, 50, -20};
-	chainGen = new ParticleSystem(position4);
-	chainGen->stripLineTipe(10); // Para poner el numero de particulas a la cadena
+	//Vector3 position4 = {20, 50, -20};
+	//chainGen = new ParticleSystem(position4);
+	//chainGen->stripLineTipe(10); // Para poner el numero de particulas a la cadena
 
-	elasticFG = new ElasticStripFG(20, 2, position4);
-	chainGen->addForceGenerator(gg);
-	chainGen->addForceGenerator(elasticFG);
+	//elasticFG = new ElasticStripFG(20, 2, position4);
+	//chainGen->addForceGenerator(gg);
+	//chainGen->addForceGenerator(elasticFG);
 
-	wgAux = new WindGenerator(position4 + Vector3(0, -20, 0), {40, 40, 40}, {0, 0, -40});
-	chainGen->addForceGenerator(wgAux);
-	wgAux->setActive(false);
+	//wgAux = new WindGenerator(position4 + Vector3(0, -20, 0), {40, 40, 40}, {0, 0, -40});
+	//chainGen->addForceGenerator(wgAux);
+	//wgAux->setActive(false);
 
 	/////////// PRACTICA 4.3
 
-	Vector3 position5 = {-20, -10, 20};
+	/*Vector3 position5 = {-20, -10, 20};
 	Vector3 volume1 = { 30,40,30 };
 	particleGen4 = new ParticleSystem(position5 + Vector3(0, 50, 0));
 	particleGen4->RainCubeTipe();
 
 	pushFG = new PushForceGenerator(position5, volume1, waterDensity);
 	particleGen4->addForceGenerator(pushFG);
-	particleGen4->addForceGenerator(gg);
+	particleGen4->addForceGenerator(gg);*/
 
 	/////////// PRACTICA 5
-	PxRigidDynamic* solid;
-	solid = gPhysics->createRigidDynamic(PxTransform({ 0, 30, 0 }));
-	solid->setLinearVelocity({ 0, 10, 0 });
+	/*solid = gPhysics->createRigidDynamic(PxTransform({ 0, 30, 0 }));
+	solid->setLinearVelocity({ 0, 0, 0 });
 	solid->setAngularVelocity({ 0,0,0 });
-	PxShape* shape = CreateShape(PxBoxGeometry(5, 5, 5));
+	shape = CreateShape(PxBoxGeometry(5, 5, 5));
 	solid->attachShape(*shape);
 	PxRigidBodyExt::updateMassAndInertia(*solid, 0.15);
 	gScene->addActor(*solid);
-	solid->addForce({1,10,1}, PxForceMode::eACCELERATION, false);
-	RenderItem* renderItem = new RenderItem(shape, solid, {0.8, 0.8, 0.8, 1});
-	//PxSimulationEventCallback
+	RenderItem* renderItem50 = new RenderItem(shape, solid, {0.8, 0.8, 0.8, 1});
+	RegisterRenderItem(renderItem50);*/
+
+	RigidSolid* solid = new RigidSolid(gScene, { 0,20,0 }, { 5,5,5 });
+
+	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
+	PxShape* sueloShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	suelo->attachShape(*sueloShape);
+	gScene->addActor(*suelo);
+	RenderItem* renderItem1 = new RenderItem(sueloShape, suelo, { 0.8, 0.8, 0.8, 1 });
+
+	Vector3 position1 = { 0, 30, 0 };
+	particleGen1 = new ParticleSystem(gScene, position1);
+	particleGen1->solidCubesTipe();
+	Vector3 position2 = { -40, 30, 80 };
+	particleGen2 = new ParticleSystem(gScene, position2);
+	particleGen2->solidCubesTipe();
+
+	gg = new GravityGenerator(position1);
+	particleGen1->addForceGenerator(gg);
+
+	wg = new WindGenerator(position1 + Vector3(0, -50, 0), { 30, 30, 30 }, { 0, 0, 20 });
+	particleGen1->addForceGenerator(wg);
+
+	vg = new VortexGenerator(position2, 60, 1);
+	particleGen2->addForceGenerator(vg);
 }
 
 
@@ -205,11 +230,13 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 
-	//particleGen1->integrate(t);
-	//particleGen2->integrate(t);
-	//particleGen3->integrate(t);
-	particleGen4->integrate(t);
-	chainGen->integrate(t);
+	// ------------------------ PRACTICAS 3 Y 4 ------------------------
+	//particleGen4->integrate(t);
+	//chainGen->integrate(t);
+
+	// ------------------------ PRACTICAS 5 ------------------------
+	particleGen1->integrate(t);
+	particleGen2->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);

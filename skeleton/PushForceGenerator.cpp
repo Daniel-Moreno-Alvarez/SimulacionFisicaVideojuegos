@@ -31,3 +31,8 @@ void PushForceGenerator::addForce(Particle* particle, double t)
 	particle->addForce(finalForce);
 
 }
+
+void PushForceGenerator::addForce(RigidSolid* particle, double t)
+{
+
+}

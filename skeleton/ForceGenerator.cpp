@@ -38,7 +38,20 @@ void ForceGenerator::update(double t) {
 			it = particles.erase(it);
 		}
 		else {
-			if (isInVolume(p) || volume == Vector3(0,0,0)) {
+			if (isInVolume(p->getTransform().p) || volume == Vector3(0,0,0)) {
+				addForce(p, t);
+			}
+			++it;
+		}
+	}
+	for (auto it = rigidSolids.begin(); it != rigidSolids.end();) {
+		RigidSolid* p = *it;
+
+		if (p == nullptr || !p->ItsAlive()) {
+			it = rigidSolids.erase(it);
+		}
+		else {
+			if (isInVolume(p->getTransform().p) || volume == Vector3(0, 0, 0)) {
 				addForce(p, t);
 			}
 			++it;
@@ -52,6 +65,11 @@ ForceGenerator::~ForceGenerator()
 		delete p;
 	}
 	particles.clear();
+
+	for (auto p : rigidSolids) {
+		delete p;
+	}
+	rigidSolids.clear();
 }
 
 void ForceGenerator::addParticle(Particle* particle)
@@ -59,17 +77,20 @@ void ForceGenerator::addParticle(Particle* particle)
 	particles.push_back(particle);
 }
 
-bool ForceGenerator::isInVolume(Particle* particle)
+void ForceGenerator::addRigidSolid(RigidSolid* sr)
+{
+	rigidSolids.push_back(sr);
+}
+
+bool ForceGenerator::isInVolume(Vector3 vec)
 {
 	if (volume == Vector3())
 	{
 		return false;
 	}
 
-	Vector3 parpos = particle->getTransform().p;
-
 	return 
-		(parpos.x >= pose.p.x - volume.x && parpos.x <= pose.p.x + volume.x) &&
-		(parpos.y >= pose.p.y - volume.y && parpos.y <= pose.p.y + volume.y) &&
-		(parpos.z >= pose.p.z - volume.z && parpos.z <= pose.p.z + volume.z);
+		(vec.x >= pose.p.x - volume.x && vec.x <= pose.p.x + volume.x) &&
+		(vec.y >= pose.p.y - volume.y && vec.y <= pose.p.y + volume.y) &&
+		(vec.z >= pose.p.z - volume.z && vec.z <= pose.p.z + volume.z);
 }
