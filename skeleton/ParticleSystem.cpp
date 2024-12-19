@@ -98,11 +98,21 @@ void ParticleSystem::RainCubeTipe()
 void ParticleSystem::solidCubesTipe()
 {
 	maxEmisions = 200;
-	emisionRange = 20.0;
+	emisionRange = 10.0;
 	limitRange = 100.0;
 	particlesPerEmision = 1;
 	generationTimeInterval = 0.1;
 	setTipe = 7;
+}
+
+void ParticleSystem::solidCapsulesTipe()
+{
+	maxEmisions = 200;
+	emisionRange = 20.0;
+	limitRange = 100.0;
+	particlesPerEmision = 1;
+	generationTimeInterval = 0.2;
+	setTipe = 8;
 }
 
 void ParticleSystem::generateParticle(int i) {
@@ -209,10 +219,18 @@ void ParticleSystem::generateParticle(int i) {
 	{
 	case 7: // cubos solid rigids
 	{
-		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), 0, UniformDistribution(-emisionRange, emisionRange));
+		Vector3 pos = pose.p + NormalDistributionVec(0, emisionRange);
 		Vector3 size = { 1, 1, 1 };
 		rs = new RigidSolid(scene, pos, size);
 		
+		break;
+	}
+	case 8: // capsules solid rigids
+	{
+		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), UniformDistribution(-emisionRange / 2, emisionRange / 2), UniformDistribution(-emisionRange, emisionRange));
+		Vector3 size = { 1, 1, 1 };
+		rs = new RigidSolid(scene, pos, size, CAPLSULE_RS);
+
 		break;
 	}
 	default:

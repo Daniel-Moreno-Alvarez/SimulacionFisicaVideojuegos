@@ -31,5 +31,8 @@ void VortexGenerator::addForce(RigidSolid* particle, double t)
     // le voy a hacer una pequeña modificación para que no salgan hacia afuera
     float aux = 0.5;
     finalforce += Vector3(diff.x, 0, diff.z) * aux;
+    Vector3 torque(0.0f, 10.0f, 0.0f);
+
+    particle->addTorque(torque);
     particle->addForce(finalforce);
 }

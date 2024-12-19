@@ -191,12 +191,12 @@ void initPhysics(bool interactive)
 	gScene->addActor(*suelo);
 	RenderItem* renderItem1 = new RenderItem(sueloShape, suelo, { 0.8, 0.8, 0.8, 1 });
 
-	Vector3 position1 = { 0, 30, 0 };
+	Vector3 position1 = { 40, 30, -40 };
 	particleGen1 = new ParticleSystem(gScene, position1);
 	particleGen1->solidCubesTipe();
-	Vector3 position2 = { -40, 30, 80 };
+	Vector3 position2 = { -40, 30, 40 };
 	particleGen2 = new ParticleSystem(gScene, position2);
-	particleGen2->solidCubesTipe();
+	particleGen2->solidCapsulesTipe();
 
 	gg = new GravityGenerator(position1);
 	particleGen1->addForceGenerator(gg);

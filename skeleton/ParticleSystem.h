@@ -41,6 +41,7 @@ public:
 	void stripLineTipe(int num);
 	void RainCubeTipe();
 	void solidCubesTipe();
+	void solidCapsulesTipe();
 
 	void generateParticle(int t);
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);

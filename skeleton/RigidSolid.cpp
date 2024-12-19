@@ -3,10 +3,24 @@
 using namespace physx;
 
 
-RigidSolid::RigidSolid(PxScene* _gScene, Vector3 Pos, Vector3 size) : gScene(_gScene)
+RigidSolid::RigidSolid(PxScene* _gScene, Vector3 Pos, Vector3 size, FORM_RS form) : gScene(_gScene)
 {
+	switch (form)
+	{
+	case SPHERE_RS:
+		shape = CreateShape(PxSphereGeometry(size.x));
+		break;
+	case CUBE_RS:
+		shape = CreateShape(PxBoxGeometry(size));
+		break;
+	case CAPLSULE_RS:
+		shape = CreateShape(PxCapsuleGeometry(size.x, size.y));
+		break;
+	default:
+		shape = CreateShape(PxSphereGeometry(size.x));
+		break;
+	}
 	solid = gScene->getPhysics().createRigidDynamic(PxTransform(Pos));
-	shape = CreateShape(PxBoxGeometry(size));
 	solid->attachShape(*shape);
 	PxRigidBodyExt::updateMassAndInertia(*solid, 0.15);
 	gScene->addActor(*solid);
@@ -71,6 +85,11 @@ physx::PxTransform RigidSolid::getTransform()
 void RigidSolid::addForce(Vector3 force)
 {
 	solid->addForce(force);
+}
+
+void RigidSolid::addTorque(Vector3 torque)
+{
+	solid->addTorque(torque);
 }
 
 Vector3 RigidSolid::getVelocity()
