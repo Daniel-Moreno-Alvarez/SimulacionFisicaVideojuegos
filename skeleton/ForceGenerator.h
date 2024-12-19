@@ -17,6 +17,7 @@ public:
 	bool isInVolume(Vector3 p);
 	virtual bool isSpring() const { return false; }
 	virtual void setK(double _k) {};
+	virtual void setPosition(Vector3 _pos);
 	virtual void interact() {};
 	bool isActive() const { return active; };
 	void setActive(bool _active) { active = _active; };

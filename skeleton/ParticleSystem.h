@@ -42,9 +42,15 @@ public:
 	void RainCubeTipe();
 	void solidCubesTipe();
 	void solidCapsulesTipe();
+	void LevelOne(int filescubes);
 
+	void generateCubesFile(int i, float height, float cubeTam);
 	void generateParticle(int t);
 	void generateSpringDemo(unsigned int _num, Vector3 anchor_pos);
+
+	int getNumParticles();
+
+	void setPosition(Vector3 _pos);
 
 	void addForceGenerator(ForceGenerator* fg);
 };

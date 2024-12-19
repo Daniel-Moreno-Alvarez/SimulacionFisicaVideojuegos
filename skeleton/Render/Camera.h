@@ -47,6 +47,8 @@ public:
 
 	physx::PxVec3		getEye()	const;
 	physx::PxVec3		getDir()	const;
+	void		setPos(physx::PxVec3);
+	void		setDir(physx::PxVec3);
 	physx::PxTransform	getTransform() const;
 private:
 	physx::PxVec3	mEye;

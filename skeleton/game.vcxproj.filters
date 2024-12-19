@@ -53,6 +53,8 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="RigidSolid.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Tirachinas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3D.h">
@@ -108,6 +110,8 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="RigidSolid.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Tirachinas.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

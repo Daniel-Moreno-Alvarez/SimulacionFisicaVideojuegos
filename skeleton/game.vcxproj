@@ -258,6 +258,7 @@
     <ClCompile Include="ElasticStripFG.cpp" />
     <ClCompile Include="ExplosionGenerator.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GravityGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -268,6 +269,7 @@
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="RigidSolid.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
+    <ClCompile Include="Tirachinas.cpp" />
     <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="VortexGenerator.cpp" />
     <ClCompile Include="WindGenerator.cpp" />
@@ -279,6 +281,7 @@
     <ClInclude Include="ElasticStripFG.h" />
     <ClInclude Include="ExplosionGenerator.h" />
     <ClInclude Include="ForceGenerator.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GravityGenerator.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
@@ -289,6 +292,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="RigidSolid.h" />
     <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="Tirachinas.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="VortexGenerator.h" />
     <ClInclude Include="WindGenerator.h" />

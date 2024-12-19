@@ -1,4 +1,4 @@
-
+#pragma once
 class Vector3D {
 public:
     float x, y, z;

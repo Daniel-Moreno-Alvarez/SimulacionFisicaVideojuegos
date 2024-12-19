@@ -1,6 +1,18 @@
 #include "Particle.h"
 #include <cmath>
 
+Particle::Particle(float size)
+    : pose({0,0,0}), vel({0,0,0}), acce({0,0,0}), damping(0.98), volume({size, size, size}) {
+    renderItem = new RenderItem();
+    renderItem->transform = &pose;
+    renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
+    renderItem->color = { 1, 1, 1, 1 };
+    RegisterRenderItem(renderItem);
+    mass = 1.0;
+    age = 0;
+    lifeLimit = NULL;
+}
+
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float Damping)
     : pose(Pos), vel(Vel), acce(Acce), damping(Damping), volume(size){
     renderItem = new RenderItem();
@@ -66,6 +78,11 @@ void Particle::SetColor(Vector4 color)
 void Particle::SetMass(float _mass)
 {
     mass = _mass;
+}
+
+void Particle::SetPos(Vector3 _pos)
+{
+    pose.p = _pos;
 }
 
 void Particle::integrate(double t) {

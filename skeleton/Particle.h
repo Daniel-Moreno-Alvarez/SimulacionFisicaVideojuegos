@@ -9,6 +9,7 @@ enum FORM {
 class Particle
 {
 public:
+	Particle(float size);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, Vector3 size, float Damping);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping, FORM);
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Damping);
@@ -23,6 +24,7 @@ public:
 	void SetLifeLimit(float LifeLimit);
 	void SetColor(Vector4 color);
 	void SetMass(float mass);
+	void SetPos(Vector3 _pos);
 	void SetImmovable(bool _immovable) { immovable = _immovable; };
 	bool ItsAlive();
 	void addForce(Vector3 force);

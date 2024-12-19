@@ -27,7 +27,14 @@ public:
 	void SetLifeLimit(float LifeLimit);
 	physx::PxTransform getTransform();
 	void addForce(Vector3 force);
+	void addAcceleration(Vector3 acce);
 	void addTorque(Vector3 torque);
 	Vector3 getVelocity();
+	void SetColor(Vector4 color);
+	void SetPosition(Vector3 pos);
+	void SetMass(float _mass);
+	void resetVel();
+	void setMaterial(Vector3);
+	float GetMass();
 };
 

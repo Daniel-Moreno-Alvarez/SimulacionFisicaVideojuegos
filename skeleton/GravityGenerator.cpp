@@ -14,5 +14,5 @@ void GravityGenerator::addForce(Particle* particle, double t)
 
 void GravityGenerator::addForce(RigidSolid* particle, double t)
 {
-	particle->addForce(force);
+	particle->addAcceleration(force);
 }

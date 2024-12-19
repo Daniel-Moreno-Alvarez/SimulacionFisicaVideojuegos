@@ -38,7 +38,7 @@ void ForceGenerator::update(double t) {
 			it = particles.erase(it);
 		}
 		else {
-			if (isInVolume(p->getTransform().p) || volume == Vector3(0,0,0)) {
+			if ((isInVolume(p->getTransform().p) || volume == Vector3(0,0,0)) && active) {
 				addForce(p, t);
 			}
 			++it;
@@ -51,7 +51,7 @@ void ForceGenerator::update(double t) {
 			it = rigidSolids.erase(it);
 		}
 		else {
-			if (isInVolume(p->getTransform().p) || volume == Vector3(0, 0, 0)) {
+			if ((isInVolume(p->getTransform().p) || volume == Vector3(0, 0, 0)) && active) {
 				addForce(p, t);
 			}
 			++it;
@@ -93,4 +93,9 @@ bool ForceGenerator::isInVolume(Vector3 vec)
 		(vec.x >= pose.p.x - volume.x && vec.x <= pose.p.x + volume.x) &&
 		(vec.y >= pose.p.y - volume.y && vec.y <= pose.p.y + volume.y) &&
 		(vec.z >= pose.p.z - volume.z && vec.z <= pose.p.z + volume.z);
+}
+
+void ForceGenerator::setPosition(Vector3 _pos)
+{
+	pose.p = _pos;
 }

@@ -34,7 +34,7 @@ void ExplosionGenerator::addForce(Particle* particle, double t)
 
         // Solo se aplica la fuerza dependiendo del radio
         if (distance <= radio) {
-            Vector3 finalForce = (intensity / (distance * distance)) * direction * pow(2.711828, t / lastTime);
+            Vector3 finalForce = (intensity / (distance * distance)) * direction;
             particle->addForce(finalForce);
         }
     }
@@ -52,7 +52,7 @@ void ExplosionGenerator::addForce(RigidSolid* particle, double t)
 
         // Solo se aplica la fuerza dependiendo del radio
         if (distance <= radio) {
-            Vector3 finalForce = (intensity / (distance * distance)) * direction * pow(2.711828, t / lastTime);
+            Vector3 finalForce = (intensity / (distance * distance)) * direction;
             particle->addForce(finalForce);
         }
     }

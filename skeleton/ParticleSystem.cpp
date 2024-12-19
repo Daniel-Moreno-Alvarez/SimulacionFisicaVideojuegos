@@ -52,8 +52,8 @@ void ParticleSystem::integrate(double t) {
 
 void ParticleSystem::fireTipe()
 {
-	emisionRange = 3.0;
-	limitRange = 50.0;
+	emisionRange = 2.0;
+	limitRange = 100.0;
 	generationTimeInterval = 0.01;
 	particlesPerEmision = 1;
 	setTipe = 1;
@@ -113,6 +113,40 @@ void ParticleSystem::solidCapsulesTipe()
 	particlesPerEmision = 1;
 	generationTimeInterval = 0.2;
 	setTipe = 8;
+}
+
+void ParticleSystem::LevelOne(int filescubes)
+{
+	
+	maxEmisions = 1;
+	limitRange = 400.0;
+	particlesPerEmision = filescubes;
+	generationTimeInterval = 0.2;
+	setTipe = 9;
+}
+
+void ParticleSystem::generateCubesFile(int max, float height, float cubeTam)
+{
+	float separation = cubeTam * 0.1;
+	float inicio = ((cubeTam + separation) / 2) * (max - 1);
+	for (int i = 0; i < max; i++)
+	{
+		RigidSolid* rs = nullptr;
+		float y = (height * (cubeTam)) + cubeTam / 2;
+		float z = (cubeTam + separation) * i - inicio;
+		Vector3 pos = {0, y, z };
+		pos = pos + pose.p;
+		rs = new RigidSolid(scene, pos, {cubeTam  / 2,cubeTam / 2,cubeTam / 2});
+		rs->SetMass(7.0);
+		if (rs)
+		{
+			rigidSolids->push_back(rs);
+			for (auto fg : forcegenerators)
+			{
+				fg->addRigidSolid(rs);
+			}
+		}
+	}
 }
 
 void ParticleSystem::generateParticle(int i) {
@@ -230,7 +264,14 @@ void ParticleSystem::generateParticle(int i) {
 		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), UniformDistribution(-emisionRange / 2, emisionRange / 2), UniformDistribution(-emisionRange, emisionRange));
 		Vector3 size = { 1, 1, 1 };
 		rs = new RigidSolid(scene, pos, size, CAPLSULE_RS);
-
+		break;
+	}
+	case 9: // generate Cubes Tree
+	{
+		int numCubes = particlesPerEmision - i;
+		int height = i;
+		generateCubesFile(numCubes, height, 10.0);
+		particlesPerEmision;
 		break;
 	}
 	default:
@@ -294,6 +335,16 @@ void ParticleSystem::generateSpringDemo(unsigned int _num, Vector3 anchor_pos)
 
 		anterior = nueva;
 	}
+}
+
+int ParticleSystem::getNumParticles()
+{
+	return particles->size() + rigidSolids->size();
+}
+
+void ParticleSystem::setPosition(Vector3 _pos)
+{
+	pose.p = _pos;
 }
 
 Vector3 ParticleSystem::UniformDistributionVec(float min, float max) {

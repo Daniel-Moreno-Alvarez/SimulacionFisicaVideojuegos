@@ -2,7 +2,6 @@
 
 using namespace physx;
 
-
 RigidSolid::RigidSolid(PxScene* _gScene, Vector3 Pos, Vector3 size, FORM_RS form) : gScene(_gScene)
 {
 	switch (form)
@@ -42,9 +41,11 @@ RigidSolid::~RigidSolid()
 	isAlive = false;
 	gScene->removeActor(*solid);
 	gScene = nullptr;
+	shape = nullptr;
+	solid = nullptr;
 	/*if (solid != nullptr && gScene != nullptr) {
+		gScene->removeActor(*solid);
 		solid->release();
-		
 		gScene = nullptr;
 	}
 
@@ -84,7 +85,12 @@ physx::PxTransform RigidSolid::getTransform()
 
 void RigidSolid::addForce(Vector3 force)
 {
-	solid->addForce(force);
+	solid->addForce(force, PxForceMode::eFORCE);
+}
+
+void RigidSolid::addAcceleration(Vector3 acce)
+{
+	solid->addForce(acce, PxForceMode::eACCELERATION);
 }
 
 void RigidSolid::addTorque(Vector3 torque)
@@ -95,4 +101,44 @@ void RigidSolid::addTorque(Vector3 torque)
 Vector3 RigidSolid::getVelocity()
 {
 	return solid->getLinearVelocity();
+}
+
+void RigidSolid::SetColor(Vector4 color)
+{
+	renderItem->color = color;
+}
+
+void RigidSolid::SetPosition(Vector3 pos)
+{
+	solid->setGlobalPose(PxTransform(pos));
+}
+
+void RigidSolid::SetMass(float _mass)
+{
+	solid->setMass(_mass);
+}
+
+void RigidSolid::resetVel()
+{
+	solid->setLinearVelocity({0,0,0});
+	solid->setAngularVelocity({ 0,0,0 });
+}
+
+void RigidSolid::setMaterial(Vector3 mat)
+{
+	// Obtener el material actual para liberarlo
+	PxMaterial* currentMaterial;
+	PxU32 materialCount = shape->getNbMaterials();
+	if (materialCount > 0) {
+		shape->getMaterials(&currentMaterial, materialCount);
+		currentMaterial->release();
+	}
+
+	PxMaterial* newMaterial = gScene->getPhysics().createMaterial(mat.x, mat.y, mat.z);
+	shape->setMaterials(&newMaterial, 1);
+}
+
+float RigidSolid::GetMass()
+{
+	return solid->getMass();
 }

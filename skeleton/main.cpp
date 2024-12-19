@@ -7,7 +7,6 @@
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
-#include "callbacks.hpp"
 #include "Particle.h"
 #include "RigidSolid.h"
 #include "Vector3D.h"
@@ -18,6 +17,8 @@
 #include "ExplosionGenerator.h"
 #include "ElasticStripFG.h"
 #include "PushForceGenerator.h"
+#include "callbacks.hpp"
+#include "GameManager.h"
 
 #include <iostream>
 
@@ -41,61 +42,12 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-/////////// PRACTICA 3
-GravityGenerator* gg;
-WindGenerator* wg;
-VortexGenerator* vg;
-ExplosionGenerator* eg;
-
-/////////// PRACTICA 4
-ParticleSystem* chainGen;
-WindGenerator* wgAux;
-ElasticStripFG* elasticFG;
-
-/////////// PRACTICA 4.3
-
-ParticleSystem* particleGen4;
-PushForceGenerator* pushFG;
-
-/////////// PRACTICA 1
-RenderItem* ejeX;
-RenderItem* ejeY;
-RenderItem* ejeZ;
-RenderItem* origen;
+///////// JUEGO FINAL
+GameManager* gM;
 
 const float distejes = 10.0f; // distancia de los ejes al origen
 const float tamejes = 1.0f; // tamaño de los ejes
 
-std::vector<Particle*> particulas;
-
-const float Damping = 0.98f;
-const float speed = 50.0f;
-const float gravity = -9.8f;
-const float waterDensity = 1000;
-
-////////// PRACTICA 5
-ParticleSystem* particleGen1;
-ParticleSystem* particleGen2;
-RigidSolid* solid;
-
-void Ejes() {
-
-	Vector3D posX = Vector3D(distejes, 0, 0);
-	PxTransform* trsX = new PxTransform(posX.x, posX.y, posX.z);
-	ejeX = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsX, {1, 0, 0, 1});
-
-	Vector3D posY = Vector3D(0, distejes, 0);
-	PxTransform* trsY = new PxTransform(posY.x, posY.y, posY.z);
-	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsY, {0, 1, 0, 1});
-
-	Vector3D posZ = Vector3D(0, 0, distejes);
-	PxTransform* trsZ = new PxTransform(posZ.x, posZ.y, posZ.z);
-	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsZ, { 0, 0, 1, 1 });
-
-	Vector3D posO = Vector3D(0, 0, 0);
-	PxTransform* trsO = new PxTransform(posO.x, posO.y, posO.z);
-	ejeY = new RenderItem(CreateShape(physx::PxSphereGeometry(tamejes)), trsO, { 0, 0, 0, 1 });
-}
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -122,90 +74,7 @@ void initPhysics(bool interactive)
 
 	////////////////////////////////////////
 
-	Ejes();
-	//Vector3 position1 = { 0, 30, 0 };
-	//particleGen1 = new ParticleSystem(gScene,position1);
-	//particleGen1->staticTipe();
-	//Vector3 position2 = { -40, 30, 80 };
-	//particleGen2 = new ParticleSystem(gScene,position2);
-	//particleGen2->staticTipe();
-	//Vector3 position3 = { 80, 30, -40 };
-	//particleGen3 = new ParticleSystem(gScene,position3);
-	//particleGen3->staticTipe();
-
-	///////////// PRACTICA 3
-
-	//gg = new GravityGenerator(position1);
-	//particleGen1->addForceGenerator(gg);
-
-	//wg = new WindGenerator(position1 + Vector3(0, -50, 0), {30, 30, 30}, {0, 0, 20});
-	//particleGen1->addForceGenerator(wg);
-
-	//vg = new VortexGenerator(position2, 60, 1);
-	//particleGen2->addForceGenerator(vg);
-
-	//eg = new ExplosionGenerator(position3, 30, 500);
-	//particleGen3->addForceGenerator(eg);
-
-	/////////// PRACTICA 4
-
-	//Vector3 position4 = {20, 50, -20};
-	//chainGen = new ParticleSystem(position4);
-	//chainGen->stripLineTipe(10); // Para poner el numero de particulas a la cadena
-
-	//elasticFG = new ElasticStripFG(20, 2, position4);
-	//chainGen->addForceGenerator(gg);
-	//chainGen->addForceGenerator(elasticFG);
-
-	//wgAux = new WindGenerator(position4 + Vector3(0, -20, 0), {40, 40, 40}, {0, 0, -40});
-	//chainGen->addForceGenerator(wgAux);
-	//wgAux->setActive(false);
-
-	/////////// PRACTICA 4.3
-
-	/*Vector3 position5 = {-20, -10, 20};
-	Vector3 volume1 = { 30,40,30 };
-	particleGen4 = new ParticleSystem(position5 + Vector3(0, 50, 0));
-	particleGen4->RainCubeTipe();
-
-	pushFG = new PushForceGenerator(position5, volume1, waterDensity);
-	particleGen4->addForceGenerator(pushFG);
-	particleGen4->addForceGenerator(gg);*/
-
-	/////////// PRACTICA 5
-	/*solid = gPhysics->createRigidDynamic(PxTransform({ 0, 30, 0 }));
-	solid->setLinearVelocity({ 0, 0, 0 });
-	solid->setAngularVelocity({ 0,0,0 });
-	shape = CreateShape(PxBoxGeometry(5, 5, 5));
-	solid->attachShape(*shape);
-	PxRigidBodyExt::updateMassAndInertia(*solid, 0.15);
-	gScene->addActor(*solid);
-	RenderItem* renderItem50 = new RenderItem(shape, solid, {0.8, 0.8, 0.8, 1});
-	RegisterRenderItem(renderItem50);*/
-
-	RigidSolid* solid = new RigidSolid(gScene, { 0,20,0 }, { 5,5,5 });
-
-	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
-	PxShape* sueloShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
-	suelo->attachShape(*sueloShape);
-	gScene->addActor(*suelo);
-	RenderItem* renderItem1 = new RenderItem(sueloShape, suelo, { 0.8, 0.8, 0.8, 1 });
-
-	Vector3 position1 = { 40, 30, -40 };
-	particleGen1 = new ParticleSystem(gScene, position1);
-	particleGen1->solidCubesTipe();
-	Vector3 position2 = { -40, 30, 40 };
-	particleGen2 = new ParticleSystem(gScene, position2);
-	particleGen2->solidCapsulesTipe();
-
-	gg = new GravityGenerator(position1);
-	particleGen1->addForceGenerator(gg);
-
-	wg = new WindGenerator(position1 + Vector3(0, -50, 0), { 30, 30, 30 }, { 0, 0, 20 });
-	particleGen1->addForceGenerator(wg);
-
-	vg = new VortexGenerator(position2, 60, 1);
-	particleGen2->addForceGenerator(vg);
+	gM = new GameManager(gScene, GetCamera());
 }
 
 
@@ -215,31 +84,12 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	
-	for (auto it = particulas.begin(); it != particulas.end(); )
-	{
-		if ((*it)->getTransform().p.y <= 0) // condicion para que las particulas desaparezcan
-		{
-			delete *it;
-			it = particulas.erase(it);
-		}
-		else
-		{
-			(*it)->integrate(t);
-			++it;
-		}
-	}
 
-	// ------------------------ PRACTICAS 3 Y 4 ------------------------
-	//particleGen4->integrate(t);
-	//chainGen->integrate(t);
-
-	// ------------------------ PRACTICAS 5 ------------------------
-	particleGen1->integrate(t);
-	particleGen2->integrate(t);
+	gM->update(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	2 + 2;
 }
 
 // Function to clean data
@@ -248,10 +98,7 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
-	for (auto it = particulas.begin(); it != particulas.end(); )
-	{
-		delete *it;
-	}
+	delete gM;
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -270,17 +117,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
+	gM->keyPress(key);
+
 	switch(toupper(key))
 	{
-	case 'P':
-	{
-		Camera* cam = GetCamera();
-		Vector3 offset = cam->getDir() * 5; // para que no esté pegado a la camara
-		Particle* bala= new Particle(camera.p + offset, cam->getDir() * speed, {0,gravity,0}, 1.0, Damping);
-		RegisterRenderItem(bala->getRenderItem());
-		particulas.push_back(bala);
-		break;
-	}
 	default:
 		break;
 	}
