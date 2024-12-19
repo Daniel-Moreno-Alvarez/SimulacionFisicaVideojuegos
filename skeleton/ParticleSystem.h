@@ -43,6 +43,7 @@ public:
 	void solidCubesTipe();
 	void solidCapsulesTipe();
 	void LevelOne(int filescubes);
+	void winParticles();
 
 	void generateCubesFile(int i, float height, float cubeTam);
 	void generateParticle(int t);

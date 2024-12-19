@@ -3,6 +3,7 @@
 #include <iostream>
 enum FORM {
 	SPHERE,
+	CAPSULE,
 	CUBE
 };
 

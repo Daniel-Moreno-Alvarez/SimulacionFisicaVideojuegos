@@ -6,7 +6,7 @@ using namespace physx;
 GameManager::GameManager(PxScene* scene, Camera* _cam) : gScene(scene), cam(_cam)
 {
 	Vector3 positionSuelo = positionBlocks;
-	positionSuelo.y -= 2;
+	positionSuelo.y -= 3;
 	levelOneGen = new ParticleSystem(gScene, positionBlocks);
 	levelOneGen->LevelOne(5);
 
@@ -15,6 +15,7 @@ GameManager::GameManager(PxScene* scene, Camera* _cam) : gScene(scene), cam(_cam
 
 	gg = new GravityGenerator({0,0,0});
 	ggBola = new GravityGenerator({0,0,0});
+	ggWin = new GravityGenerator({ 0,0,0 });
 	wg = new WindGenerator({ 0, -50, 0 }, { 0,0,0 }, { 0, 0, 500 });
 	wg->setActive(false);
 	eg = new ExplosionGenerator(positionTirachinas, 50, 5000);
@@ -40,6 +41,11 @@ GameManager::GameManager(PxScene* scene, Camera* _cam) : gScene(scene), cam(_cam
 	cam->setPos({-200, 40, 0});
 
 	CreatePointerBall();
+
+	Vector3 winPosition = cam->getEye() + Vector3(20, 40, 0);
+	winParticles = new ParticleSystem(scene, winPosition);
+	winParticles->winParticles();
+	winParticles->addForceGenerator(ggWin);
 }
 
 GameManager::~GameManager() {
@@ -47,6 +53,8 @@ GameManager::~GameManager() {
 	delete wg;
 	delete eg;
 	delete ggBola;
+	delete ggWin;
+	delete winParticles;
 	delete levelOneGen;
 	delete tirachinas;
 }
@@ -106,6 +114,11 @@ void GameManager::update(double t)
 		break;
 	default:
 		break;
+	}
+
+	if (levelOneGen->getNumParticles() <= 0)
+	{
+		winParticles->integrate(t);
 	}
 }
 

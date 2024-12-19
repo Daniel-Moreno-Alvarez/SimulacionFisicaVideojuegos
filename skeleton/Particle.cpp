@@ -37,6 +37,9 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acce, float size, float Dam
     case CUBE:
         renderItem->shape = CreateShape(physx::PxBoxGeometry(size, size, size));
         break;
+    case CAPSULE:
+        renderItem->shape = CreateShape(physx::PxCapsuleGeometry(size, size));
+        break;
     default:
         renderItem->shape = CreateShape(physx::PxSphereGeometry(size));
         break;

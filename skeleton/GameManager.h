@@ -30,10 +30,12 @@ private:
 
 	GravityGenerator* gg;
 	GravityGenerator* ggBola;
+	GravityGenerator* ggWin;
 	WindGenerator* wg;
 	ExplosionGenerator* eg;
 	ParticleSystem* levelOneGen;
 	ParticleSystem* particlesBall;
+	ParticleSystem* winParticles;
 
 	Camera* cam;
 

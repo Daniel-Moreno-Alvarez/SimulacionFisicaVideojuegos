@@ -119,10 +119,20 @@ void ParticleSystem::LevelOne(int filescubes)
 {
 	
 	maxEmisions = 1;
-	limitRange = 400.0;
+	limitRange = 200.0;
 	particlesPerEmision = filescubes;
 	generationTimeInterval = 0.2;
 	setTipe = 9;
+}
+
+void ParticleSystem::winParticles()
+{
+	maxEmisions = 200;
+	emisionRange = 20.0;
+	limitRange = 200.0;
+	particlesPerEmision = 5;
+	generationTimeInterval = 0.1;
+	setTipe = 10;
 }
 
 void ParticleSystem::generateCubesFile(int max, float height, float cubeTam)
@@ -272,6 +282,29 @@ void ParticleSystem::generateParticle(int i) {
 		int height = i;
 		generateCubesFile(numCubes, height, 10.0);
 		particlesPerEmision;
+		break;
+	}
+	case 10: //lluvia de cubos
+	{
+		Vector3 pos = pose.p + Vector3(UniformDistribution(-emisionRange, emisionRange), 0, UniformDistribution(-emisionRange, emisionRange));
+		Vector3 size = { 1, 1, 1 };
+		int tipe = UniformDistribution(0, 3);
+		FORM_RS form;
+		switch (tipe)
+		{
+		case 0:
+			form = CAPLSULE_RS;
+			break;
+		case 1:
+			form = CUBE_RS;
+			break;
+		default:
+			form = SPHERE_RS;
+			break;
+		}
+		rs = new RigidSolid(scene, pos, size, form);
+		rs->addTorque({1,1,0});
+		rs->SetColor({0, 1, 0, 1});
 		break;
 	}
 	default:
